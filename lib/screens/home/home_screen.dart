@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mf_foodmart/api_handler/api_Service.dart';
+import 'package:mf_foodmart/screens/categories/view_all_categories.dart';
 import 'package:mf_foodmart/screens/home/components/banner.dart';
-import 'package:mf_foodmart/screens/home/components/home_categories.dart';
+import 'package:mf_foodmart/screens/categories/home_categories.dart';
+import 'package:mf_foodmart/screens/products/product_screen.dart';
 import 'package:mf_foodmart/screens/home/components/search_field.dart';
-import 'package:mf_foodmart/screens/home/components/view_all.dart';
+import 'package:mf_foodmart/screens/home/components/view_all_button.dart';
+import 'package:mf_foodmart/screens/products/view_all_products.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ApiService.fetchProduct(page: 1, perPage: 15);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: MyAppColor.bgColor,
@@ -28,13 +33,13 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   /// Banner -----------------------------
                   const HomeBanner(),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 15),
 
                   /// View all Categories Button-----------------
-                  ViewAll(
+                  ViewAllButton(
                     text: "Categories",
                     onTap: () {
-                      print("categories");
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewAllCategories()));
                     },
                   ),
 
@@ -45,33 +50,16 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   /// View All Popular Product Button ----------------------
-                  ViewAll(
+                  ViewAllButton(
                     text: "Popular Product",
                     onTap: () {
-                      print("Popular product");
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=> ViewAllProduct()));
                     },
                   ),
 
+
                   /// Popular Product -------------------------------------
-                  SizedBox(
-                    child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 100,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisExtent: 300,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                      ),
-                      itemBuilder: (context, index) {
-                        return Container(
-                          color: Colors.yellow,
-                        );
-                      },
-                    ),
-                  )
+                  SizedBox(child: ProductScreen())
                 ],
               ),
             )),
@@ -81,3 +69,5 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+
