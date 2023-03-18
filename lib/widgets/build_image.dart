@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:mf_foodmart/utility/my_app_colors.dart';
 
 class BuildImage extends StatelessWidget {
   const BuildImage({Key? key, required this.size, required this.imgUrl})

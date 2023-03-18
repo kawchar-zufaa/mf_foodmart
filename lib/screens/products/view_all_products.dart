@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mf_foodmart/controller/product_controller.dart';
-import 'package:mf_foodmart/screens/home/components/search_field.dart';
+import 'package:mf_foodmart/widgets/search_field.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 import 'package:mf_foodmart/widgets/text_widget.dart';
 

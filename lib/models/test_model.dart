@@ -1,15 +1,15 @@
 // // To parse this JSON data, do
 // //
-// //     final countriesModel = countriesModelFromJson(jsonString);
+// //     final catWiseProductModel = catWiseProductModelFromJson(jsonString);
 //
 // import 'dart:convert';
 //
-// List<CountriesModel> countriesModelFromJson(String str) => List<CountriesModel>.from(json.decode(str).map((x) => CountriesModel.fromJson(x)));
+// List<CatWiseProductModel> catWiseProductModelFromJson(String str) => List<CatWiseProductModel>.from(json.decode(str).map((x) => CatWiseProductModel.fromJson(x)));
 //
-// String countriesModelToJson(List<CountriesModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+// String catWiseProductModelToJson(List<CatWiseProductModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 //
-// class CountriesModel {
-//   CountriesModel({
+// class CatWiseProductModel {
+//   CatWiseProductModel({
 //     required this.id,
 //     required this.name,
 //     required this.slug,
@@ -92,7 +92,7 @@
 //   Status status;
 //   bool featured;
 //   CatalogVisibility catalogVisibility;
-//   String description;
+//   Description description;
 //   String shortDescription;
 //   String sku;
 //   String price;
@@ -137,9 +137,9 @@
 //   List<Category> categories;
 //   List<Category> tags;
 //   List<Image> images;
-//   List<Attribute> attributes;
+//   List<dynamic> attributes;
 //   List<dynamic> defaultAttributes;
-//   List<int> variations;
+//   List<dynamic> variations;
 //   List<dynamic> groupedProducts;
 //   int menuOrder;
 //   String priceHtml;
@@ -149,7 +149,7 @@
 //   bool hasOptions;
 //   Links links;
 //
-//   factory CountriesModel.fromJson(Map<String, dynamic> json) => CountriesModel(
+//   factory CatWiseProductModel.fromJson(Map<String, dynamic> json) => CatWiseProductModel(
 //     id: json["id"],
 //     name: json["name"],
 //     slug: json["slug"],
@@ -162,7 +162,7 @@
 //     status: statusValues.map[json["status"]]!,
 //     featured: json["featured"],
 //     catalogVisibility: catalogVisibilityValues.map[json["catalog_visibility"]]!,
-//     description: json["description"],
+//     description: descriptionValues.map[json["description"]]!,
 //     shortDescription: json["short_description"],
 //     sku: json["sku"],
 //     price: json["price"],
@@ -207,9 +207,9 @@
 //     categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
 //     tags: List<Category>.from(json["tags"].map((x) => Category.fromJson(x))),
 //     images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
-//     attributes: List<Attribute>.from(json["attributes"].map((x) => Attribute.fromJson(x))),
+//     attributes: List<dynamic>.from(json["attributes"].map((x) => x)),
 //     defaultAttributes: List<dynamic>.from(json["default_attributes"].map((x) => x)),
-//     variations: List<int>.from(json["variations"].map((x) => x)),
+//     variations: List<dynamic>.from(json["variations"].map((x) => x)),
 //     groupedProducts: List<dynamic>.from(json["grouped_products"].map((x) => x)),
 //     menuOrder: json["menu_order"],
 //     priceHtml: json["price_html"],
@@ -233,7 +233,7 @@
 //     "status": statusValues.reverse[status],
 //     "featured": featured,
 //     "catalog_visibility": catalogVisibilityValues.reverse[catalogVisibility],
-//     "description": description,
+//     "description": descriptionValues.reverse[description],
 //     "short_description": shortDescription,
 //     "sku": sku,
 //     "price": price,
@@ -278,7 +278,7 @@
 //     "categories": List<dynamic>.from(categories.map((x) => x.toJson())),
 //     "tags": List<dynamic>.from(tags.map((x) => x.toJson())),
 //     "images": List<dynamic>.from(images.map((x) => x.toJson())),
-//     "attributes": List<dynamic>.from(attributes.map((x) => x.toJson())),
+//     "attributes": List<dynamic>.from(attributes.map((x) => x)),
 //     "default_attributes": List<dynamic>.from(defaultAttributes.map((x) => x)),
 //     "variations": List<dynamic>.from(variations.map((x) => x)),
 //     "grouped_products": List<dynamic>.from(groupedProducts.map((x) => x)),
@@ -289,42 +289,6 @@
 //     "stock_status": stockStatusValues.reverse[stockStatus],
 //     "has_options": hasOptions,
 //     "_links": links.toJson(),
-//   };
-// }
-//
-// class Attribute {
-//   Attribute({
-//     required this.id,
-//     required this.name,
-//     required this.position,
-//     required this.visible,
-//     required this.variation,
-//     required this.options,
-//   });
-//
-//   int id;
-//   String name;
-//   int position;
-//   bool visible;
-//   bool variation;
-//   List<String> options;
-//
-//   factory Attribute.fromJson(Map<String, dynamic> json) => Attribute(
-//     id: json["id"],
-//     name: json["name"],
-//     position: json["position"],
-//     visible: json["visible"],
-//     variation: json["variation"],
-//     options: List<String>.from(json["options"].map((x) => x)),
-//   );
-//
-//   Map<String, dynamic> toJson() => {
-//     "id": id,
-//     "name": name,
-//     "position": position,
-//     "visible": visible,
-//     "variation": variation,
-//     "options": List<dynamic>.from(options.map((x) => x)),
 //   };
 // }
 //
@@ -348,21 +312,43 @@
 //   });
 //
 //   int id;
-//   String name;
-//   String slug;
+//   Name name;
+//   Slug slug;
 //
 //   factory Category.fromJson(Map<String, dynamic> json) => Category(
 //     id: json["id"],
-//     name: json["name"],
-//     slug: json["slug"],
+//     name: nameValues.map[json["name"]]!,
+//     slug: slugValues.map[json["slug"]]!,
 //   );
 //
 //   Map<String, dynamic> toJson() => {
 //     "id": id,
-//     "name": name,
-//     "slug": slug,
+//     "name": nameValues.reverse[name],
+//     "slug": slugValues.reverse[slug],
 //   };
 // }
+//
+// enum Name { FISH_AND_SEAFOOD, BULAICHA }
+//
+// final nameValues = EnumValues({
+//   "Bulaicha": Name.BULAICHA,
+//   "Fish And Seafood": Name.FISH_AND_SEAFOOD
+// });
+//
+// enum Slug { GLOBE_FISHERIES_PRODUCTS, BULAICHA }
+//
+// final slugValues = EnumValues({
+//   "bulaicha": Slug.BULAICHA,
+//   "globe-fisheries-products": Slug.GLOBE_FISHERIES_PRODUCTS
+// });
+//
+// enum Description { P_500_G_P, EMPTY, P_11_LBS_BR_100_GM_P }
+//
+// final descriptionValues = EnumValues({
+//   "": Description.EMPTY,
+//   "<p>11Lbs<br />\n100gm + -</p>\n": Description.P_11_LBS_BR_100_GM_P,
+//   "<p>500g</p>\n": Description.P_500_G_P
+// });
 //
 // class Dimensions {
 //   Dimensions({
@@ -598,42 +584,6 @@
 //
 // class FluffyValue {
 //   FluffyValue({
-//     this.the8141,
-//     this.wordCount,
-//     this.linkCount,
-//     this.headingCount,
-//     this.mediaCount,
-//     this.the10744,
-//   });
-//
-//   The10744? the8141;
-//   String? wordCount;
-//   String? linkCount;
-//   String? headingCount;
-//   String? mediaCount;
-//   The10744? the10744;
-//
-//   factory FluffyValue.fromJson(Map<String, dynamic> json) => FluffyValue(
-//     the8141: json["8141"] == null ? null : The10744.fromJson(json["8141"]),
-//     wordCount: json["wordCount"],
-//     linkCount: json["linkCount"],
-//     headingCount: json["headingCount"],
-//     mediaCount: json["mediaCount"],
-//     the10744: json["10744"] == null ? null : The10744.fromJson(json["10744"]),
-//   );
-//
-//   Map<String, dynamic> toJson() => {
-//     "8141": the8141?.toJson(),
-//     "wordCount": wordCount,
-//     "linkCount": linkCount,
-//     "headingCount": headingCount,
-//     "mediaCount": mediaCount,
-//     "10744": the10744?.toJson(),
-//   };
-// }
-//
-// class The10744 {
-//   The10744({
 //     required this.videoType,
 //     required this.uploadVideoId,
 //     required this.uploadVideoUrl,
@@ -659,7 +609,7 @@
 //   String hideInformation;
 //   String audioStatus;
 //
-//   factory The10744.fromJson(Map<String, dynamic> json) => The10744(
+//   factory FluffyValue.fromJson(Map<String, dynamic> json) => FluffyValue(
 //     videoType: json["video_type"],
 //     uploadVideoId: json["upload_video_id"],
 //     uploadVideoUrl: json["upload_video_url"],
@@ -708,18 +658,17 @@
 //   "zero-rate": TaxClass.ZERO_RATE
 // });
 //
-// enum TaxStatus { TAXABLE, NONE }
+// enum TaxStatus { NONE, TAXABLE }
 //
 // final taxStatusValues = EnumValues({
 //   "none": TaxStatus.NONE,
 //   "taxable": TaxStatus.TAXABLE
 // });
 //
-// enum Type { SIMPLE, VARIABLE }
+// enum Type { SIMPLE }
 //
 // final typeValues = EnumValues({
-//   "simple": Type.SIMPLE,
-//   "variable": Type.VARIABLE
+//   "simple": Type.SIMPLE
 // });
 //
 // class EnumValues<T> {
