@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mf_foodmart/api_handler/api_Service.dart';
 import 'package:mf_foodmart/models/cat_wise_product_model.dart';
+import 'package:mf_foodmart/screens/details/details_screen.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 import 'package:mf_foodmart/widgets/build_image.dart';
 import 'package:mf_foodmart/widgets/search_field.dart';
@@ -126,18 +127,31 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             Positioned(
                               bottom: 0,
                               right: 0,
-                              child: Container(
-                                height: 45,
-                                width: 45,
-                                decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      bottomRight: Radius.circular(20)),
-                                  color: MyAppColor.btnColor,
-                                ),
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(
+                                    images: data.images!,
+                                    cid: data.categories!.first.id,
+                                    catName: data.categories![0].name,
+                                    pName: data.name.toString(),
+                                    price: data.price.toString(),
+                                    description: data.description!,
+                                    shortDescription: data.shortDescription!,
+                                  ),),);
+                                },
+                                child: Container(
+                                  height: 45,
+                                  width: 45,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        bottomRight: Radius.circular(20)),
+                                    color: MyAppColor.btnColor,
+                                  ),
+                                  child: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),

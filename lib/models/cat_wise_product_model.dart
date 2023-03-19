@@ -6,8 +6,6 @@ import 'dart:convert';
 
 List<CatWiseProductModel> catWiseProductModelFromJson(String str) => List<CatWiseProductModel>.from(json.decode(str).map((x) => CatWiseProductModel.fromJson(x)));
 
-String catWiseProductModelToJson(List<CatWiseProductModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class CatWiseProductModel {
   CatWiseProductModel({
     required this.id,
@@ -158,10 +156,10 @@ class CatWiseProductModel {
     dateCreatedGmt: DateTime.parse(json["date_created_gmt"]),
     dateModified: DateTime.parse(json["date_modified"]),
     dateModifiedGmt: DateTime.parse(json["date_modified_gmt"]),
-    type: typeValues.map[json["type"]]!,
-    status: statusValues.map[json["status"]]!,
+    type: typeValues.map[json["type"]],
+    status: statusValues.map[json["status"]],
     featured: json["featured"],
-    catalogVisibility: catalogVisibilityValues.map[json["catalog_visibility"]]!,
+    catalogVisibility: catalogVisibilityValues.map[json["catalog_visibility"]],
     description: json["description"],
     shortDescription: json["short_description"],
     sku: json["sku"],
@@ -182,11 +180,11 @@ class CatWiseProductModel {
     downloadExpiry: json["download_expiry"],
     externalUrl: json["external_url"],
     buttonText: json["button_text"],
-    taxStatus: taxStatusValues.map[json["tax_status"]]!,
-    taxClass: taxClassValues.map[json["tax_class"]]!,
+    taxStatus: taxStatusValues.map[json["tax_status"]],
+    taxClass: taxClassValues.map[json["tax_class"]],
     manageStock: json["manage_stock"],
     stockQuantity: json["stock_quantity"],
-    backorders: backordersValues.map[json["backorders"]]!,
+    backorders: backordersValues.map[json["backorders"]],
     backordersAllowed: json["backorders_allowed"],
     backordered: json["backordered"],
     lowStockAmount: json["low_stock_amount"],
@@ -215,81 +213,12 @@ class CatWiseProductModel {
     priceHtml: json["price_html"],
     relatedIds: List<int>.from(json["related_ids"].map((x) => x)),
     metaData: List<MetaDatum>.from(json["meta_data"].map((x) => MetaDatum.fromJson(x))),
-    stockStatus: stockStatusValues.map[json["stock_status"]]!,
+    stockStatus: stockStatusValues.map[json["stock_status"]],
     hasOptions: json["has_options"],
     links: Links.fromJson(json["_links"]),
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "slug": slug,
-    "permalink": permalink,
-    "date_created": dateCreated!.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt!.toIso8601String(),
-    "date_modified": dateModified!.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt!.toIso8601String(),
-    "type": typeValues.reverse[type],
-    "status": statusValues.reverse[status],
-    "featured": featured,
-    "catalog_visibility": catalogVisibilityValues.reverse[catalogVisibility],
-    "description": description,
-    "short_description": shortDescription,
-    "sku": sku,
-    "price": price,
-    "regular_price": regularPrice,
-    "sale_price": salePrice,
-    "date_on_sale_from": dateOnSaleFrom,
-    "date_on_sale_from_gmt": dateOnSaleFromGmt,
-    "date_on_sale_to": dateOnSaleTo,
-    "date_on_sale_to_gmt": dateOnSaleToGmt,
-    "on_sale": onSale,
-    "purchasable": purchasable,
-    "total_sales": totalSales,
-    "virtual": virtual,
-    "downloadable": downloadable,
-    "downloads": List<dynamic>.from(downloads!.map((x) => x)),
-    "download_limit": downloadLimit,
-    "download_expiry": downloadExpiry,
-    "external_url": externalUrl,
-    "button_text": buttonText,
-    "tax_status": taxStatusValues.reverse[taxStatus],
-    "tax_class": taxClassValues.reverse[taxClass],
-    "manage_stock": manageStock,
-    "stock_quantity": stockQuantity,
-    "backorders": backordersValues.reverse[backorders],
-    "backorders_allowed": backordersAllowed,
-    "backordered": backordered,
-    "low_stock_amount": lowStockAmount,
-    "sold_individually": soldIndividually,
-    "weight": weight,
-    "dimensions": dimensions!.toJson(),
-    "shipping_required": shippingRequired,
-    "shipping_taxable": shippingTaxable,
-    "shipping_class": shippingClass,
-    "shipping_class_id": shippingClassId,
-    "reviews_allowed": reviewsAllowed,
-    "average_rating": averageRating,
-    "rating_count": ratingCount,
-    "upsell_ids": List<dynamic>.from(upsellIds!.map((x) => x)),
-    "cross_sell_ids": List<dynamic>.from(crossSellIds!.map((x) => x)),
-    "parent_id": parentId,
-    "purchase_note": purchaseNote,
-    "categories": List<dynamic>.from(categories!.map((x) => x.toJson())),
-    "tags": List<dynamic>.from(tags!.map((x) => x.toJson())),
-    "images": List<dynamic>.from(images!.map((x) => x.toJson())),
-    "attributes": List<dynamic>.from(attributes!.map((x) => x.toJson())),
-    "default_attributes": List<dynamic>.from(defaultAttributes!.map((x) => x)),
-    "variations": List<dynamic>.from(variations!.map((x) => x)),
-    "grouped_products": List<dynamic>.from(groupedProducts!.map((x) => x)),
-    "menu_order": menuOrder,
-    "price_html": priceHtml,
-    "related_ids": List<dynamic>.from(relatedIds!.map((x) => x)),
-    "meta_data": List<dynamic>.from(metaData!.map((x) => x.toJson())),
-    "stock_status": stockStatusValues.reverse[stockStatus],
-    "has_options": hasOptions,
-    "_links": links!.toJson(),
-  };
+
 }
 
 class Attribute {
@@ -357,11 +286,6 @@ class Category {
     slug: json["slug"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "slug": slug,
-  };
 }
 
 class Dimensions {
@@ -381,11 +305,6 @@ class Dimensions {
     height: json["height"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "length": length,
-    "width": width,
-    "height": height,
-  };
 }
 
 class Image {
@@ -420,16 +339,7 @@ class Image {
     alt: json["alt"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "date_created": dateCreated.toIso8601String(),
-    "date_created_gmt": dateCreatedGmt.toIso8601String(),
-    "date_modified": dateModified.toIso8601String(),
-    "date_modified_gmt": dateModifiedGmt.toIso8601String(),
-    "src": src,
-    "name": name,
-    "alt": alt,
-  };
+
 }
 
 class Links {
@@ -446,10 +356,6 @@ class Links {
     collection: List<Collection>.from(json["collection"].map((x) => Collection.fromJson(x))),
   );
 
-  Map<String, dynamic> toJson() => {
-    "self": List<dynamic>.from(self.map((x) => x.toJson())),
-    "collection": List<dynamic>.from(collection.map((x) => x.toJson())),
-  };
 }
 
 class Collection {
@@ -485,11 +391,6 @@ class MetaDatum {
     value: json["value"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "key": key,
-    "value": value,
-  };
 }
 
 class PurpleValue {
@@ -548,24 +449,6 @@ class PurpleValue {
     options: List<Option>.from(json["options"].map((x) => Option.fromJson(x))),
   );
 
-  Map<String, dynamic> toJson() => {
-    "name": name,
-    "title_format": titleFormat,
-    "description_enable": descriptionEnable,
-    "description": description,
-    "type": type,
-    "display": display,
-    "position": position,
-    "required": required,
-    "restrictions": restrictions,
-    "restrictions_type": restrictionsType,
-    "adjust_price": adjustPrice,
-    "price_type": priceTypeValues.reverse[priceType],
-    "price": price,
-    "min": min,
-    "max": max,
-    "options": List<dynamic>.from(options.map((x) => x.toJson())),
-  };
 }
 
 class Option {
@@ -588,12 +471,6 @@ class Option {
     priceType: priceTypeValues.map[json["price_type"]]!,
   );
 
-  Map<String, dynamic> toJson() => {
-    "label": label,
-    "price": price,
-    "image": image,
-    "price_type": priceTypeValues.reverse[priceType],
-  };
 }
 
 enum PriceType { FLAT_FEE }
@@ -628,14 +505,6 @@ class FluffyValue {
     the10744: json["10744"] == null ? null : The10744.fromJson(json["10744"]),
   );
 
-  Map<String, dynamic> toJson() => {
-    "8141": the8141?.toJson(),
-    "wordCount": wordCount,
-    "linkCount": linkCount,
-    "headingCount": headingCount,
-    "mediaCount": mediaCount,
-    "10744": the10744?.toJson(),
-  };
 }
 
 class The10744 {
@@ -679,19 +548,6 @@ class The10744 {
     audioStatus: json["audio_status"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "video_type": videoType,
-    "upload_video_id": uploadVideoId,
-    "upload_video_url": uploadVideoUrl,
-    "youtube_url": youtubeUrl,
-    "vimeo_url": vimeoUrl,
-    "autoplay": autoplay,
-    "video_size": videoSize,
-    "video_control": videoControl,
-    "hide_gallery_img": hideGalleryImg,
-    "hide_information": hideInformation,
-    "audio_status": audioStatus,
-  };
 }
 
 enum Status { PUBLISH }

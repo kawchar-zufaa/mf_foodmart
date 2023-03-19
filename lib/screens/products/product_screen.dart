@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mf_foodmart/controller/product_controller.dart';
+import 'package:mf_foodmart/screens/details/details_screen.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 import 'package:mf_foodmart/widgets/build_image.dart';
 import 'package:mf_foodmart/widgets/text_widget.dart';
@@ -75,14 +76,27 @@ class ProductScreen extends StatelessWidget {
                   Positioned(
                     bottom: 0,
                     right: 0,
-                    child: Container(
-                      height: 45,
-                      width: 45,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(20),bottomRight: Radius.circular(20)),
-                        color: MyAppColor.btnColor,
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(
+                          images: data.images,
+                          cid: data.categories.first.id,
+                          catName: data.categories[0].name,
+                          pName: data.name,
+                          price: data.price,
+                          description: data.description.toString(),
+                          shortDescription: data.shortDescription.toString(),
+                        ),),);
+                      },
+                      child: Container(
+                        height: 45,
+                        width: 45,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20),bottomRight: Radius.circular(20)),
+                          color: MyAppColor.btnColor,
+                        ),
+                        child: const Icon(Icons.add,color: Colors.white,),
                       ),
-                      child: const Icon(Icons.add,color: Colors.white,),
                     ),
                   ),
                   Positioned(

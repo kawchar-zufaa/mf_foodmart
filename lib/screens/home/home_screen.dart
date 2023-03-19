@@ -18,6 +18,8 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         child: Column(
           children: [
+
+
             /// Search bar--------------------------------
             const SearchField(),
             const SizedBox(height: 10),
@@ -25,34 +27,47 @@ class HomeScreen extends StatelessWidget {
                 child: SingleChildScrollView(
               child: Column(
                 children: [
+
+
                   /// Banner -----------------------------
                   const HomeBanner(),
                   const SizedBox(height: 15),
+
 
                   /// View all Categories Button-----------------
                   ViewAllButton(
                     text: "Categories",
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewAllCategories()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewAllCategories()));
                     },
                   ),
+
 
                   /// Home Categories --------------------------------
                   SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: HomeCategories()),
-                  const SizedBox(height: 10),
+
+
 
                   /// View All Popular Product Button ----------------------
+                  const SizedBox(height: 10),
                   ViewAllButton(
                     text: "Popular Product",
                     onTap: () {
-                     Navigator.push(context, MaterialPageRoute(builder: (context)=> ViewAllProduct()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewAllProduct()));
                     },
                   ),
+                  
 
-                  const SizedBox(height: 8),
                   /// Popular Product -------------------------------------
+                  const SizedBox(height: 8),
                   SizedBox(child: ProductScreen())
                 ],
               ),
@@ -63,5 +78,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-

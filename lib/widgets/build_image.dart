@@ -39,7 +39,7 @@ class BuildImage extends StatelessWidget {
                         image: imageProvider,
                         fit: BoxFit.cover,
                         colorFilter: const ColorFilter.mode(
-                            Colors.black12, BlendMode.colorBurn),
+                            Colors.transparent, BlendMode.colorBurn),
                       ),
                     ),
                   ),
