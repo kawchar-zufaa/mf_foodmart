@@ -4,7 +4,7 @@ import 'package:mf_foodmart/screens/home/components/banner.dart';
 import 'package:mf_foodmart/screens/categories/home_categories.dart';
 import 'package:mf_foodmart/screens/products/product_screen.dart';
 import 'package:mf_foodmart/widgets/search_field.dart';
-import 'package:mf_foodmart/screens/home/components/view_all_button.dart';
+import 'package:mf_foodmart/widgets/view_all_button.dart';
 import 'package:mf_foodmart/screens/products/view_all_products.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 
@@ -37,6 +37,7 @@ class HomeScreen extends StatelessWidget {
                   /// View all Categories Button-----------------
                   ViewAllButton(
                     text: "Categories",
+                    viewText: 'View All',
                     onTap: () {
                       Navigator.push(
                           context,
@@ -57,6 +58,7 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                   ViewAllButton(
                     text: "Popular Product",
+                    viewText: 'View All',
                     onTap: () {
                       Navigator.push(
                           context,

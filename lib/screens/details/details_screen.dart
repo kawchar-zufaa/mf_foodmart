@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mf_foodmart/api_handler/api_Service.dart';
 import 'package:mf_foodmart/models/cat_wise_product_model.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:mf_foodmart/widgets/build_image.dart';
 import 'package:mf_foodmart/widgets/custom_button.dart';
 import 'package:mf_foodmart/widgets/show_html_code.dart';
 import 'package:mf_foodmart/widgets/text_widget.dart';
+import 'package:mf_foodmart/widgets/view_all_button.dart';
 
 class DetailsScreen extends StatefulWidget {
   final List images;
@@ -32,10 +34,11 @@ class DetailsScreen extends StatefulWidget {
 
 class _DetailsScreenState extends State<DetailsScreen> {
   int _currentIndex = 0;
-
+  int count=1;
+  var _isRemove=false;
+  var _isAdd=false;
   var categoriesList = <CatWiseProductModel>[];
   var isLoading = false;
-
   Future<void> fetchData() async {
     try {
       isLoading = true;
@@ -69,74 +72,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
           children: [
             Stack(
               children: [
-                Container(
-                  height: size.height / 2.85,
-                  width: size.width,
-                  decoration: const BoxDecoration(
-                    color: Color(0xffD8F4EB),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(15),
-                      bottomLeft: Radius.circular(15),
-                    ),
-                  ),
-                  child: Stack(
-                    children: [
-                      PageView.builder(
-                          itemCount: widget.images.length,
-                          onPageChanged: (value) {
-                            setState(() {
-                              _currentIndex = value;
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(50.0),
-                              child: BuildImage(
-                                  size: size,
-                                  imgUrl: widget.images.isNotEmpty
-                                      ? widget.images[index].src
-                                      : ""),
-                            );
-                          }),
-                      Positioned(
-                        bottom: 5,
-                        left: size.width / 2.2,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: _buildPageIndicator()),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.arrow_back),
-                        ),
-                        TextWidget(
-                          text: "Product Details",
-                          size: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                ///  Product image and   Dots indicator ...............
+                _buildImageDotsIndicator(size),
+
+                /// Back button and Favourite button ...................
+                _backAndFavoriteButton(context),
               ],
             ),
             Padding(
@@ -144,10 +84,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  ///  Category name......................
                   Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.only(left: 7),
-                    height: size.height / 15,
+                    height: size.height / 20,
                     width: 100,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
@@ -158,196 +99,54 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       maxLines: 2,
                     ),
                   ),
-                  SizedBox(
-                    height: size.height / 80,
+
+                  /// Product name and price.............
+                  SizedBox(height: size.height / 80),
+                  _nameAndPrice(),
+
+                  /// Rating and Count button............
+                  SizedBox(height: size.height / 78),
+                  _ratingAndCountButton(
+                    removeButton: () {
+                      if(count==1){
+                        Fluttertoast.showToast(msg: "Quantity is low");
+                      }else if(count>1){
+                        setState(() {
+                          _isRemove=true;
+                          _isAdd=false;
+                          count--;
+                        });
+                      }
+                    },
+                    text: "$count",
+                    addButton: () {
+
+                         setState(() {
+                           _isAdd=true;
+                           _isRemove=false;
+                           count++;
+                         });
+
+                    },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextWidget(text: widget.pName),
-                      Row(
-                        children: [
-                          TextWidget(
-                            text: "CAD ${widget.price}",
-                            color: MyAppColor.btnColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          TextWidget(
-                            text: '/ per lbs',
-                            color: MyAppColor.iconColor,
-                          ),
-                        ],
-                      )
-                    ],
+
+                  /// Description .....................
+                  const SizedBox(height: 15),
+                  _description(size),
+
+                  /// Related Product sell all button..............
+                  ViewAllButton(
+                    text: "Related Product",
+                    onTap: () {},
+                    viewText: 'See All',
                   ),
-                  SizedBox(
-                    height: size.height / 78,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Row(
-                            children: List.generate(
-                                5,
-                                (index) => const Icon(
-                                      Icons.star,
-                                      size: 18,
-                                      color: Color(0xffFFA542),
-                                    )),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          TextWidget(
-                            text: "(24)",
-                            color: MyAppColor.iconColor,
-                            size: 14,
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.grey[300],
-                            radius: 12,
-                            child: const InkWell(
-                              child: Icon(
-                                Icons.remove,
-                                size: 16,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          TextWidget(text: "1"),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const CircleAvatar(
-                            backgroundColor: MyAppColor.btnColor,
-                            radius: 12,
-                            child: InkWell(
-                              child: Icon(
-                                Icons.add,
-                                size: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextWidget(text: 'Description'),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  widget.description.isEmpty || widget.shortDescription.isEmpty
-                      ? Container(
-                    alignment: Alignment.center,
-                          height: size.height / 7,
-                          width: size.width,
-                          child: TextWidget(
-                            text: "Empty Description",
-                          ),
-                        )
-                      : Container(
-                          height: size.height / 7,
-                          width: size.width,
-                          child: widget.description.isEmpty
-                              ? ShowHtmlCode(htmlCode: widget.description)
-                              : ShowHtmlCode(htmlCode: widget.description)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextWidget(
-                        text: "Related Product",
-                        size: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      InkWell(
-                        child: TextWidget(
-                          text: "See All",
-                          size: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
+
+                  /// Related Product ...................
                   isLoading
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
-                      : SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                              children:
-                                  List.generate(categoriesList.length, (index) {
-                            final data = categoriesList[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: categoriesList.isEmpty
-                                  ? Center(
-                                      child: TextWidget(
-                                        text: "No related product found",
-                                      ),
-                                    )
-                                  : Container(
-                                      height: size.height / 7,
-                                      width: 80,
-                                      color: Colors.white,
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              height: 50,
-                                              width: size.height,
-                                              color: const Color(0xffDEE3E0),
-                                              child: BuildImage(
-                                                size: size,
-                                                imgUrl: data.images!.isNotEmpty
-                                                    ? data.images!.first.src
-                                                    : "",
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 2, left: 4),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                TextWidget(
-                                                  text: data.name.toString(),
-                                                  size: 10,
-                                                  maxLines: 2,
-                                                ),
-                                                const SizedBox(
-                                                  height: 3,
-                                                ),
-                                                data.price==null?TextWidget(text: "Upcoming price"):TextWidget(
-                                                  text:"CAD ${data.price}",
-                                                  size: 10,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: MyAppColor.btnColor,
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                            );
-                          })),
-                        ),
+                      : _relatedProduct(size),
                 ],
               ),
             )
@@ -359,6 +158,256 @@ class _DetailsScreenState extends State<DetailsScreen> {
         text: "Add to cart",
       ),
     );
+  }
+
+  Widget _description(Size size) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextWidget(text: 'Description'),
+        const SizedBox(height: 8),
+        widget.description.isEmpty || widget.shortDescription.isEmpty
+            ? Container(
+                alignment: Alignment.center,
+                height: size.height / 7,
+                width: size.width,
+                child: TextWidget(
+                  text: "Empty Description",
+                ),
+              )
+            : Container(
+                height: size.height / 7,
+                width: size.width,
+                child: widget.description.isEmpty
+                    ? ShowHtmlCode(htmlCode: widget.description)
+                    : ShowHtmlCode(htmlCode: widget.description)),
+      ],
+    );
+  }
+
+  Widget _ratingAndCountButton(
+      {required VoidCallback removeButton,
+      required String text,
+      required VoidCallback addButton}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Row(
+              children: List.generate(
+                  5,
+                  (index) => const Icon(
+                        Icons.star,
+                        size: 18,
+                        color: Color(0xffFFA542),
+                      )),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            TextWidget(
+              text: "(24)",
+              color: MyAppColor.iconColor,
+              size: 14,
+            )
+          ],
+        ),
+        Row(
+          children: [
+            CircleAvatar(
+              backgroundColor:_isRemove?MyAppColor.btnColor:Colors.grey[300],
+              radius: 12,
+              child: InkWell(
+                onTap: removeButton,
+                child: Icon(
+                  Icons.remove,
+                  size: 16,color: _isRemove?Colors.white:MyAppColor.btnColor,
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            TextWidget(text: text),
+            const SizedBox(width: 5),
+            CircleAvatar(
+              backgroundColor:_isAdd? MyAppColor.btnColor:Colors.grey[300],
+              radius: 12,
+              child: InkWell(
+                onTap: addButton,
+                child: Icon(
+                  Icons.add,
+                  size: 16,
+                  color: _isAdd?Colors.white:MyAppColor.btnColor,
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _nameAndPrice() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        TextWidget(text: widget.pName),
+        Row(
+          children: [
+            TextWidget(
+              text: "CAD ${widget.price}",
+              color: MyAppColor.btnColor,
+              fontWeight: FontWeight.bold,
+            ),
+            TextWidget(
+              text: '/ per lbs',
+              color: MyAppColor.iconColor,
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _relatedProduct(Size size) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+          children: List.generate(categoriesList.length, (index) {
+        final data = categoriesList[index];
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: categoriesList.isEmpty
+              ? Center(
+                  child: TextWidget(
+                    text: "No related product found",
+                  ),
+                )
+              : Container(
+                  height: size.height / 7,
+                  width: 80,
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 50,
+                          width: size.height,
+                          color: const Color(0xffDEE3E0),
+                          child: BuildImage(
+                            size: size,
+                            imgUrl: data.images!.isNotEmpty
+                                ? data.images!.first.src
+                                : "",
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2, left: 4),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextWidget(
+                              text: data.name.toString(),
+                              size: 10,
+                              maxLines: 2,
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            data.price == null
+                                ? TextWidget(text: "Upcoming price")
+                                : TextWidget(
+                                    text: "CAD ${data.price}",
+                                    size: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: MyAppColor.btnColor,
+                                  ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+        );
+      })),
+    );
+  }
+
+  Positioned _backAndFavoriteButton(BuildContext context) {
+    return Positioned(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
+            TextWidget(
+              text: "Product Details",
+              size: 16,
+              fontWeight: FontWeight.w400,
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.favorite,
+                color: Colors.red,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageDotsIndicator(Size size) {
+    return Container(
+        height: size.height / 2.85,
+        width: size.width,
+        decoration: const BoxDecoration(
+          color: Color(0xffD8F4EB),
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(15),
+            bottomLeft: Radius.circular(15),
+          ),
+        ),
+        child: Stack(
+          children: [
+            PageView.builder(
+                itemCount: widget.images.length,
+                onPageChanged: (value) {
+                  setState(() {
+                    _currentIndex = value;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(50.0),
+                    child: BuildImage(
+                        size: size,
+                        imgUrl: widget.images.isNotEmpty
+                            ? widget.images[index].src
+                            : ""),
+                  );
+                }),
+            Positioned(
+              bottom: 5,
+              left: size.width / 2.2,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: _buildPageIndicator()),
+            ),
+          ],
+        ));
   }
 
   List<Widget> _buildPageIndicator() {

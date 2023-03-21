@@ -5,7 +5,9 @@ import 'package:mf_foodmart/widgets/text_widget.dart';
 class ViewAllButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
-  const ViewAllButton({Key? key, required this.text, required this.onTap}) : super(key: key);
+  final String viewText;
+  const ViewAllButton({Key? key, required this.text, required this.onTap, required this.viewText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +20,16 @@ class ViewAllButton extends StatelessWidget {
           size: 16,
         ),
         InkWell(
-          onTap:onTap,
+          onTap: onTap,
           child: Container(
             alignment: Alignment.center,
             height: 25,
             width: 60,
             decoration: BoxDecoration(
-              border: Border.all(
-                  color: const Color(0xffEAEBEC)
-              ),
-              borderRadius: BorderRadius.circular(30)
-            ),
+                border: Border.all(color: const Color(0xffEAEBEC)),
+                borderRadius: BorderRadius.circular(30)),
             child: TextWidget(
-              text: 'View All',
+              text: viewText,
               color: MyAppColor.textColor,
               size: 12,
             ),
