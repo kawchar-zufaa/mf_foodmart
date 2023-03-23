@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:mf_foodmart/screens/cart_screen/cart_screen.dart';
 import 'package:mf_foodmart/screens/home/home_screen.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 class MainScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _MainScreenState extends State<MainScreen> {
   final pages = [
     HomeScreen(),
     const Text("Second Screen"),
-    const Text("Favourite Screen"),
+     CartScreen(),
     const Text("profile Screen")
   ];
 

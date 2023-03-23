@@ -79,6 +79,7 @@ class ProductScreen extends StatelessWidget {
                     child: InkWell(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(
+                          pId: data.id,
                           images: data.images,
                           cid: data.categories.first.id,
                           catName: data.categories[0].name,

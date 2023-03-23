@@ -21,7 +21,7 @@ class CustomButton extends StatelessWidget {
           color: MyAppColor.btnColor,
         ),
         child: TextButton(
-          onPressed:()=>onTap,
+          onPressed:onTap,
           child: TextWidget(
             text: text,
             color: MyAppColor.productBG,

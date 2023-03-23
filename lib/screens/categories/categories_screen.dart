@@ -50,23 +50,24 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     print('idddddddddddddid == ${widget.cid}');
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: MyAppColor.bgColor,
+        backgroundColor: MyAppColor.bgColor,
         appBar: AppBar(
-            iconTheme: const IconThemeData(
-                color: MyAppColor.textColor
-            ),
+            iconTheme: const IconThemeData(color: MyAppColor.textColor),
             backgroundColor: MyAppColor.bgColor,
             elevation: 0,
             centerTitle: true,
-            title: TextWidget(text: widget.name,color: MyAppColor.textColor,size: 20,),
+            title: TextWidget(
+              text: widget.name,
+              color: MyAppColor.textColor,
+              size: 20,
+            ),
             bottom: const PreferredSize(
               preferredSize: Size.fromHeight(50),
               child: Padding(
                 padding: EdgeInsets.all(8.0),
                 child: SearchField(),
               ),
-            )
-        ),
+            )),
         body: isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -102,7 +103,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 width: 120,
                                 child: BuildImage(
                                   size: size,
-                                  imgUrl:data.images!.isNotEmpty ? data.images!.first.src.toString() : "",
+                                  imgUrl: data.images!.isNotEmpty
+                                      ? data.images!.first.src.toString()
+                                      : "",
                                 ),
                               ),
                             ),
@@ -128,16 +131,23 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               bottom: 0,
                               right: 0,
                               child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailsScreen(
-                                    images: data.images!,
-                                    cid: data.categories!.first.id,
-                                    catName: data.categories![0].name,
-                                    pName: data.name.toString(),
-                                    price: data.price.toString(),
-                                    description: data.description!,
-                                    shortDescription: data.shortDescription!,
-                                  ),),);
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailsScreen(
+                                        pId: data.id!.toInt(),
+                                        images: data.images!,
+                                        cid: data.categories!.first.id,
+                                        catName: data.categories![0].name,
+                                        pName: data.name.toString(),
+                                        price: data.price.toString(),
+                                        description: data.description!,
+                                        shortDescription:
+                                            data.shortDescription!,
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: Container(
                                   height: 45,

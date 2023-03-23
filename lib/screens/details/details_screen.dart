@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mf_foodmart/api_handler/api_Service.dart';
+import 'package:mf_foodmart/database_helper/cart_database/cart_database.dart';
+import 'package:mf_foodmart/models/cart_model.dart';
 import 'package:mf_foodmart/models/cat_wise_product_model.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 import 'package:mf_foodmart/widgets/build_image.dart';
@@ -10,6 +12,7 @@ import 'package:mf_foodmart/widgets/text_widget.dart';
 import 'package:mf_foodmart/widgets/view_all_button.dart';
 
 class DetailsScreen extends StatefulWidget {
+  final int pId;
   final List images;
   final int cid;
   final String catName;
@@ -19,13 +22,15 @@ class DetailsScreen extends StatefulWidget {
   final String shortDescription;
   const DetailsScreen(
       {Key? key,
+        required this.pId,
       required this.images,
       required this.cid,
       required this.catName,
       required this.pName,
       required this.price,
       required this.description,
-      required this.shortDescription})
+      required this.shortDescription,
+      })
       : super(key: key);
 
   @override
@@ -61,6 +66,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
     fetchData();
     super.initState();
   }
+
+      _addCartItem(int index){
+     CartModel cartModel=CartModel(
+         productId:widget.pId ,
+         productImage: widget.images[index].src,
+         productName: widget.pName,
+         productPrice: widget.price,
+         count: count
+     );
+     print('============$cartModel');
+     CartDatabase.instance.insertCartItem(cartModel);
+
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +120,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
                   /// Product name and price.............
                   SizedBox(height: size.height / 80),
-                  _nameAndPrice(),
+                  _nameAndPrice(size),
 
                   /// Rating and Count button............
                   SizedBox(height: size.height / 78),
@@ -154,7 +172,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
       ),
       bottomNavigationBar: CustomButton(
-        onTap: () {},
+        onTap: () {
+          print('..............Kawchar');
+          CartModel cartModel=CartModel(
+              productId:widget.pId ,
+              productImage: widget.images[0].src,
+              productName: widget.pName,
+              productPrice: widget.price,
+              count: count
+          );
+          print('....................................');
+          print('============$cartModel');
+          CartDatabase.instance.insertCartItem(cartModel);
+
+        },
         text: "Add to cart",
       ),
     );
@@ -166,7 +197,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       children: [
         TextWidget(text: 'Description'),
         const SizedBox(height: 8),
-        widget.description.isEmpty || widget.shortDescription.isEmpty
+        widget.description.isEmpty && widget.shortDescription.isEmpty
             ? Container(
                 alignment: Alignment.center,
                 height: size.height / 7,
@@ -175,11 +206,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   text: "Empty Description",
                 ),
               )
-            : Container(
+            :
+        Container(
                 height: size.height / 7,
                 width: size.width,
                 child: widget.description.isEmpty
-                    ? ShowHtmlCode(htmlCode: widget.description)
+                    ? ShowHtmlCode(htmlCode: widget.shortDescription)
                     : ShowHtmlCode(htmlCode: widget.description)),
       ],
     );
@@ -249,11 +281,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  Widget _nameAndPrice() {
+  Widget _nameAndPrice(Size size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TextWidget(text: widget.pName),
+        Container(
+            height: 50,
+            width: size.width/2,
+            child: TextWidget(text: widget.pName,maxLines: 2,)),
         Row(
           children: [
             TextWidget(
