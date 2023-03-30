@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mf_foodmart/models/cart_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,24 +31,55 @@ class CartDatabase {
         productImage TEXT,
         productName TEXT,
         productPrice TEXT,
+        insertionTime TEXT,
         count INTEGER  
       )
       ''');
   }
 
-  Future<int> insertCartItem(CartModel cartItem) async {
+  Future<void> insertCartItem(CartModel cartItem) async {
     final db = await database;
+       final List<Map<String,dynamic>> cartList= await db.query(
 
-    return await db.insert(
-      'cart_items',
-      cartItem.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+           'cart_items',
+         where: 'productId = ?',
+         whereArgs: [cartItem.productId],
+         orderBy: 'insertionTime DESC',
+
+       );
+
+       if(cartList.isNotEmpty){
+         Fluttertoast.showToast(msg: 'Product is Already added to cart');
+       }else{
+
+         final currentTime=DateTime.now().toString();
+          await db.insert(
+           'cart_items',
+           cartItem.toMap()..['insertionTime']=currentTime,
+           conflictAlgorithm: ConflictAlgorithm.replace,
+         );
+
+          Fluttertoast.showToast(msg: 'Product added to cart');
+       }
+
+  }
+
+
+  Future<void> updateCartItem(CartModel cartItem)async{
+    final db=await database;
+    await db.update('cart_items',
+        cartItem.toMap(),
+      where: 'productId = ?',
+      whereArgs: [cartItem.productId]
     );
   }
 
   Future<List<CartModel>> getCartItems() async {
     final db = await instance.database;
-     var product=await db.query('cart_items',orderBy: 'id');
+     var product=await db.query(
+         'cart_items',
+         orderBy: 'insertionTime DESC',
+     );
 
      List<CartModel> _product = product.isNotEmpty?product.map((json) => CartModel.fromMap(json)).toList():[];
       return _product;

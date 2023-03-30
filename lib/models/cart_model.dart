@@ -4,7 +4,7 @@ class CartModel {
   final String productImage;
   final String productName;
   final String productPrice;
-  final int count;
+   int count;
 
   CartModel({
     this.id,

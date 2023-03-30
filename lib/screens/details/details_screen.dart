@@ -44,6 +44,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   var _isAdd=false;
   var categoriesList = <CatWiseProductModel>[];
   var isLoading = false;
+
   Future<void> fetchData() async {
     try {
       isLoading = true;
@@ -67,19 +68,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
     super.initState();
   }
 
-      _addCartItem(int index){
-     CartModel cartModel=CartModel(
-         productId:widget.pId ,
-         productImage: widget.images[index].src,
-         productName: widget.pName,
-         productPrice: widget.price,
-         count: count
-     );
-     print('============$cartModel');
-     CartDatabase.instance.insertCartItem(cartModel);
-
-   }
-
+   //    _addCartItem(int index){
+   //   CartModel cartModel=CartModel(
+   //       productId:widget.pId ,
+   //       productImage: widget.images[index].src,
+   //       productName: widget.pName,
+   //       productPrice: widget.price,
+   //       count: count
+   //   );
+   //   print('============$cartModel');
+   //   CartDatabase.instance.insertCartItem(cartModel);
+   //
+   // }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -172,18 +172,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
       ),
       bottomNavigationBar: CustomButton(
-        onTap: () {
-          print('..............Kawchar');
-          CartModel cartModel=CartModel(
-              productId:widget.pId ,
-              productImage: widget.images[0].src,
-              productName: widget.pName,
-              productPrice: widget.price,
-              count: count
-          );
-          print('....................................');
-          print('============$cartModel');
-          CartDatabase.instance.insertCartItem(cartModel);
+        onTap: (){
+
+
+            CartModel cartModel=CartModel(
+                productId:widget.pId ,
+                productImage: widget.images[0].src,
+                productName: widget.pName,
+                productPrice: widget.price,
+                count: count
+            );
+
+               CartDatabase.instance.insertCartItem(cartModel);
+
+
 
         },
         text: "Add to cart",
@@ -289,19 +291,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
             height: 50,
             width: size.width/2,
             child: TextWidget(text: widget.pName,maxLines: 2,)),
-        Row(
-          children: [
-            TextWidget(
-              text: "CAD ${widget.price}",
-              color: MyAppColor.btnColor,
-              fontWeight: FontWeight.bold,
-            ),
-            TextWidget(
-              text: '/ per lbs',
-              color: MyAppColor.iconColor,
-            ),
-          ],
-        )
+        Padding(
+          padding: const EdgeInsets.only(bottom: 30),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextWidget(
+                text: "CAD ${widget.price}",
+                color: MyAppColor.btnColor,
+                fontWeight: FontWeight.bold,
+              ),
+              TextWidget(
+                text: '/ per lbs',
+                color: MyAppColor.iconColor,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -372,7 +379,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  Positioned _backAndFavoriteButton(BuildContext context) {
+  Widget _backAndFavoriteButton(BuildContext context) {
     return Positioned(
       child: Padding(
         padding: const EdgeInsets.all(8.0),

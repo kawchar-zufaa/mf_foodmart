@@ -26,7 +26,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       isLoading = true;
 
       final data = await ApiService.fetchCatWaysProduct(cid: widget.cid);
-      print("////////// data $data");
       if (data != null) {
         setState(() {
           categoriesList.addAll(data);
@@ -47,7 +46,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('idddddddddddddid == ${widget.cid}');
     final size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: MyAppColor.bgColor,

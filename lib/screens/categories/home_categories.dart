@@ -28,7 +28,7 @@ class HomeCategories extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(5.0),
               child: Card(
-                elevation:0,
+                elevation: 0,
                 shadowColor: Colors.grey,
                 color: MyAppColor.productBG,
                 child: Column(
