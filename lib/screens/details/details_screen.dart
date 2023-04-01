@@ -68,18 +68,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     super.initState();
   }
 
-   //    _addCartItem(int index){
-   //   CartModel cartModel=CartModel(
-   //       productId:widget.pId ,
-   //       productImage: widget.images[index].src,
-   //       productName: widget.pName,
-   //       productPrice: widget.price,
-   //       count: count
-   //   );
-   //   print('============$cartModel');
-   //   CartDatabase.instance.insertCartItem(cartModel);
-   //
-   // }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -174,16 +162,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
       bottomNavigationBar: CustomButton(
         onTap: (){
 
+           if(widget.price.isEmpty|| widget.price==null){
+             Fluttertoast.showToast(msg: "This product Unavailable");
+           }else{
+             CartModel cartModel=CartModel(
+                 productId:widget.pId ,
+                 productImage: widget.images[0].src,
+                 productName: widget.pName,
+                 productPrice: widget.price,
+                 count: count
+             );
 
-            CartModel cartModel=CartModel(
-                productId:widget.pId ,
-                productImage: widget.images[0].src,
-                productName: widget.pName,
-                productPrice: widget.price,
-                count: count
-            );
+             CartDatabase.instance.insertCartItem(cartModel);
+           }
 
-               CartDatabase.instance.insertCartItem(cartModel);
 
 
 

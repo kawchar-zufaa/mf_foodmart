@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:mf_foodmart/controller/cart_controller.dart';
 import 'package:mf_foodmart/database_helper/cart_database/cart_database.dart';
 import 'package:mf_foodmart/models/cart_model.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
@@ -14,6 +16,8 @@ class CartItemWidget extends StatefulWidget {
 }
 
 class _CartItemWidgetState extends State<CartItemWidget> {
+  final _cartController=Get.put(CartController());
+
   bool _isRemove = false;
   bool _isAdd = false;
 
@@ -58,7 +62,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
                 Column(
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _cartController.deleteCartItem(widget.cartModel.productId);
+                      },
                       icon: const Icon(Icons.close,color: Colors.grey,size: 20,),),
                     _countButton(
                         removeButton: () {

@@ -74,6 +74,14 @@ class CartDatabase {
     );
   }
 
+  Future<void> deleteCartItem(int productId) async {
+    final db = await database;
+    await db.delete(
+      'cart_items',
+      where: 'productId = ?',
+      whereArgs: [productId],
+    );
+  }
   Future<List<CartModel>> getCartItems() async {
     final db = await instance.database;
      var product=await db.query(

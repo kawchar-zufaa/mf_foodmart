@@ -3,10 +3,20 @@ import 'package:get/get.dart';
 import 'package:mf_foodmart/controller/cart_controller.dart';
 import 'package:mf_foodmart/screens/cart_screen/component/cart_item_widget.dart';
 import 'package:mf_foodmart/screens/cart_screen/component/promo_code_field.dart';
+import 'package:mf_foodmart/screens/cart_screen/component/total_calculation.dart';
+import 'package:mf_foodmart/screens/check_out/checkout_screen.dart';
+import 'package:mf_foodmart/widgets/custom_button.dart';
 import 'package:mf_foodmart/widgets/text_widget.dart';
 
 class CartScreen extends StatelessWidget {
+
+
   final _cartController = Get.put(CartController());
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,46 +55,15 @@ class CartScreen extends StatelessWidget {
               /// Promo code field............................................#
               const PromoCodeField(),
               const SizedBox(height: 20),
-              
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Subtotal:'),
-                      Text('123'),
-                    ],
-                  ),
-                  const SizedBox(height: 8,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Shipping:'),
-                      Text('123'),
-                    ],
-                  ),
-                  const SizedBox(height: 8,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Discount:'),
-                      Text('123'),
-                    ],
-                  ),
-                    const Text('----------------------------------------------------------------',style: TextStyle(
-                      letterSpacing: 2
-                    ),),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Total:'),
-                      Text('123'),
-                    ],
-                  ),
-                ],
-              ),
-            
+
+              /// Total Calculation ............................................#
+              TotalCalculation(),
               const SizedBox(height: 10,),
+
+              /// Continue to Checkout Button....................................#
+              CustomButton(onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>const CheckoutScreen()));
+              }, text: 'Continue to Checkout')
             ],
           ),
         );
