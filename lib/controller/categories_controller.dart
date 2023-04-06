@@ -75,7 +75,7 @@ class CategoriesController extends GetxController{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 100,
                       width: 100,
                       child: BuildImage(

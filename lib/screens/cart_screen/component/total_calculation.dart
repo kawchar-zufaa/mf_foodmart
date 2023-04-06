@@ -51,7 +51,7 @@ class TotalCalculation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextWidget(text: 'Total :',size: 20,fontWeight: FontWeight.bold,),
-            TextWidget(text: 'CAD ${totalPrice()}',size: 20,fontWeight: FontWeight.bold,)
+            TextWidget(text: 'CAD ${_cartController.getTotalPrice()+shippingCharge+discount}',size: 20,fontWeight: FontWeight.bold,)
           ],
         ),
       ],

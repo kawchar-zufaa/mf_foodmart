@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mf_foodmart/controller/cart_controller.dart';
+import 'package:mf_foodmart/models/address_model.dart';
 import 'package:mf_foodmart/screens/cart_screen/component/cart_item_widget.dart';
 import 'package:mf_foodmart/screens/cart_screen/component/promo_code_field.dart';
 import 'package:mf_foodmart/screens/cart_screen/component/total_calculation.dart';
@@ -10,14 +11,7 @@ import 'package:mf_foodmart/widgets/text_widget.dart';
 
 class CartScreen extends StatelessWidget {
 
-
   final _cartController = Get.put(CartController());
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     _cartController.getCartData();
@@ -62,7 +56,7 @@ class CartScreen extends StatelessWidget {
 
               /// Continue to Checkout Button....................................#
               CustomButton(onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>const CheckoutScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> CheckoutScreen()));
               }, text: 'Continue to Checkout')
             ],
           ),

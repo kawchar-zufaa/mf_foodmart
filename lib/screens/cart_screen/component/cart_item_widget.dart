@@ -5,6 +5,7 @@ import 'package:mf_foodmart/controller/cart_controller.dart';
 import 'package:mf_foodmart/database_helper/cart_database/cart_database.dart';
 import 'package:mf_foodmart/models/cart_model.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
+import 'package:mf_foodmart/widgets/build_image.dart';
 import 'package:mf_foodmart/widgets/text_widget.dart';
 
 class CartItemWidget extends StatefulWidget {
@@ -34,30 +35,33 @@ class _CartItemWidgetState extends State<CartItemWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.network(
-                  widget.cartModel.productImage,
-                  width: 80,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextWidget(text: widget.cartModel.productName),
-                    const SizedBox(height: 10,),
-                    Row(
-                      children: [
-                        TextWidget(
-                          text: "CAD ${widget.cartModel.productPrice}",
-                          color: MyAppColor.btnColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        TextWidget(
-                          text: '/per lbs',
-                          color: Colors.grey,
-                        )
-                      ],
-                    ),
-                  ],
+                BuildImage(size: size/10, imgUrl: widget.cartModel.productImage),
+                // Image.network(
+                //   widget.cartModel.productImage,
+                //   width: 80,
+                // ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextWidget(text: widget.cartModel.productName,maxLines: 2,),
+                      const SizedBox(height: 10,),
+                      Row(
+                        children: [
+                          TextWidget(
+                            text: "CAD ${widget.cartModel.productPrice}",
+                            color: MyAppColor.btnColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          TextWidget(
+                            text: '/per lbs',
+                            color: Colors.grey,
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 Column(
                   children: [
