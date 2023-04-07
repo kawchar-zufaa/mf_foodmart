@@ -47,6 +47,16 @@ class _AddressScreenState extends State<AddressScreen> {
   void initState() {
    if(widget.addressModel!=null){
      firstNameController.text=widget.addressModel!.firstName;
+     lastNameController.text=widget.addressModel!.lastName;
+     companyController.text=widget.addressModel!.company;
+     address1Controller.text=widget.addressModel!.address1;
+     address2Controller.text=widget.addressModel!.address2;
+     cityController.text=widget.addressModel!.city;
+     stateController.text=widget.addressModel!.state;
+     postcodeController.text=widget.addressModel!.postCode;
+     countryController.text=widget.addressModel!.country;
+     emailController.text=widget.addressModel!.email;
+     phoneController.text=widget.addressModel!.phone;
    }
     super.initState();
   }
@@ -132,13 +142,20 @@ class _AddressScreenState extends State<AddressScreen> {
                   email: emailController.text,
                   phone: phoneController.text,
                 );
-               await DeliveryAddressDatabase.instance.insertAddress(addressModel);
-               print('============================== first name ${addressModel.firstName}');
-                Fluttertoast.showToast(msg: 'Data insert Successfully');
-                   Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckoutScreen()));
+                if(widget.addressModel==null){
+                  await DeliveryAddressDatabase.instance.insertAddress(addressModel);
+                  Fluttertoast.showToast(msg: 'Data insert Successfully');
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckoutScreen()));
+                }else{
+                  addressModel.id=widget.addressModel!.id;
+                  await DeliveryAddressDatabase.instance.updateAddress(addressModel);
+                  Fluttertoast.showToast(msg: 'Data Updated Successfully');
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckoutScreen()));
+                }
+
               }
             },
-            text: "Insert",
+            text:widget.addressModel==null? "Insert":"Update",
           )),
     );
   }

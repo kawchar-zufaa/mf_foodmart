@@ -39,7 +39,7 @@ class DeliveryAddressDatabase {
       city TEXT,
       state TEXT,
       postCode TEXT,
-      Country TEXT,
+      country TEXT,
       email TEXT,
       phone TEXT
       )''');
