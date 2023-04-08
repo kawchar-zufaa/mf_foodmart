@@ -9,13 +9,13 @@ class TotalCalculation extends StatelessWidget {
    TotalCalculation({Key? key}) : super(key: key);
 
 
-  double shippingCharge=0.0;
-  double discount=0.0;
-  double total=0.0;
-  totalPrice(){
-    total=_cartController.getTotalPrice()+shippingCharge+discount;
-    return total;
-  }
+  // double shippingCharge=0.0;
+  // double discount=0.0;
+  // double total=0.0;
+  // totalPrice(){
+  //   total=_cartController.getTotalPrice()+shippingCharge+discount;
+  //   return total;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class TotalCalculation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Shipping:'),
-            Text('CAD $shippingCharge'),
+            Text('CAD ${_cartController.shippingCharge.value}'),
           ],
         ),
         const SizedBox(height: 8,),
@@ -41,7 +41,7 @@ class TotalCalculation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Discount:'),
-            Text('CAD $discount'),
+            Text('CAD ${_cartController.discount.value}'),
           ],
         ),
         const Text('----------------------------------------------------------------',style: TextStyle(
@@ -51,7 +51,7 @@ class TotalCalculation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextWidget(text: 'Total :',size: 20,fontWeight: FontWeight.bold,),
-            TextWidget(text: 'CAD ${_cartController.getTotalPrice()+shippingCharge+discount}',size: 20,fontWeight: FontWeight.bold,)
+            TextWidget(text: 'CAD ${_cartController.getTotalPrice()+_cartController.shippingCharge.value+_cartController.discount.value}',size: 20,fontWeight: FontWeight.bold,)
           ],
         ),
       ],

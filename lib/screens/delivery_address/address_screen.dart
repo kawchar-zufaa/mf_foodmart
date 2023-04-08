@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mf_foodmart/controller/address_controller.dart';
+import 'package:mf_foodmart/controller/cart_controller.dart';
 import 'package:mf_foodmart/database_helper/delivery_address_database/delivery_address_database.dart';
 import 'package:mf_foodmart/models/address_model.dart';
 import 'package:mf_foodmart/screens/check_out/checkout_screen.dart';
@@ -20,44 +21,34 @@ class AddressScreen extends StatefulWidget {
 
 class _AddressScreenState extends State<AddressScreen> {
   TextEditingController firstNameController = TextEditingController();
-
   TextEditingController lastNameController = TextEditingController();
-
   TextEditingController companyController = TextEditingController();
-
   TextEditingController address1Controller = TextEditingController();
-
   TextEditingController address2Controller = TextEditingController();
-
   TextEditingController cityController = TextEditingController();
-
   TextEditingController stateController = TextEditingController();
-
   TextEditingController postcodeController = TextEditingController();
-
   TextEditingController countryController = TextEditingController();
-
   TextEditingController emailController = TextEditingController();
-
   TextEditingController phoneController = TextEditingController();
-
   final _addressController = Get.put(AddressController());
+  final _cartController = Get.put(CartController());
 
   @override
   void initState() {
-   if(widget.addressModel!=null){
-     firstNameController.text=widget.addressModel!.firstName;
-     lastNameController.text=widget.addressModel!.lastName;
-     companyController.text=widget.addressModel!.company;
-     address1Controller.text=widget.addressModel!.address1;
-     address2Controller.text=widget.addressModel!.address2;
-     cityController.text=widget.addressModel!.city;
-     stateController.text=widget.addressModel!.state;
-     postcodeController.text=widget.addressModel!.postCode;
-     countryController.text=widget.addressModel!.country;
-     emailController.text=widget.addressModel!.email;
-     phoneController.text=widget.addressModel!.phone;
-   }
+    if (widget.addressModel != null) {
+      firstNameController.text = widget.addressModel!.firstName;
+      lastNameController.text = widget.addressModel!.lastName;
+      companyController.text = widget.addressModel!.company;
+      address1Controller.text = widget.addressModel!.address1;
+      address2Controller.text = widget.addressModel!.address2;
+      cityController.text = widget.addressModel!.city;
+      stateController.text = widget.addressModel!.state;
+      postcodeController.text = widget.addressModel!.postCode;
+      countryController.text = widget.addressModel!.country;
+      emailController.text = widget.addressModel!.email;
+      phoneController.text = widget.addressModel!.phone;
+    }
     super.initState();
   }
 
@@ -142,20 +133,35 @@ class _AddressScreenState extends State<AddressScreen> {
                   email: emailController.text,
                   phone: phoneController.text,
                 );
-                if(widget.addressModel==null){
-                  await DeliveryAddressDatabase.instance.insertAddress(addressModel);
+                if (widget.addressModel == null) {
+                  await DeliveryAddressDatabase.instance
+                      .insertAddress(addressModel);
                   Fluttertoast.showToast(msg: 'Data insert Successfully');
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckoutScreen()));
-                }else{
-                  addressModel.id=widget.addressModel!.id;
-                  await DeliveryAddressDatabase.instance.updateAddress(addressModel);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => CheckoutScreen(
+                                cartItem: _cartController.cartList,
+                                totalAmount: _cartController.getTotalPrice() +
+                                    _cartController.shippingCharge.value +
+                                    _cartController.discount.value,
+                              )));
+                } else {
+                  addressModel.id = widget.addressModel!.id;
+                  await DeliveryAddressDatabase.instance
+                      .updateAddress(addressModel);
                   Fluttertoast.showToast(msg: 'Data Updated Successfully');
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>CheckoutScreen()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => CheckoutScreen(
+                        cartItem: _cartController.cartList,
+                        totalAmount: _cartController.getTotalPrice() +
+                            _cartController.shippingCharge.value +
+                            _cartController.discount.value,
+                      )));
                 }
-
               }
             },
-            text:widget.addressModel==null? "Insert":"Update",
+            text: widget.addressModel == null ? "Insert" : "Update",
           )),
     );
   }

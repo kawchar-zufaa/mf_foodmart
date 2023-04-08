@@ -7,7 +7,8 @@ import 'package:mf_foodmart/models/cart_model.dart';
 class CartController extends GetxController {
   var cartList = <CartModel>[].obs;
   var isLoading = false.obs;
-
+  var discount=0.0.obs;
+  var shippingCharge=0.0.obs;
   @override
   void onInit() {
     getCartData();

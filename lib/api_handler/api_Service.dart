@@ -34,25 +34,6 @@ class ApiService {
 
 
   /// Category wise product method here.................................
-  // static Future<List<CatWiseProductModel>> fetchCatWaysProduct(
-  //     {required int cid}) async {
-  //   final response = await http.get(
-  //     Uri.parse(MyConstants.categoriesWaysProduct(cid)),
-  //     headers: {
-  //       'Authorization':
-  //           'Basic ${base64Encode(utf8.encode('$username:$password'))}',
-  //     },
-  //   );
-  //
-  //   if(response.statusCode==200){
-  //
-  //     List<dynamic> data=json.decode(response.body) as List;
-  //     var jsonData=data.map((e) => CatWiseProductModel.fromJson(e)).toList();
-  //     return jsonData;
-  //   }else{
-  //     throw Exception('Failed to load data');
-  //   }
-  // }
   static Future<List<CatWiseProductModel>> fetchCatWaysProduct(
       {required int cid}) async {
     final response = await http.get(
