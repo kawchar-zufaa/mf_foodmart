@@ -83,9 +83,11 @@ class CartDatabase {
     );
   }
 
-  Future<void> deleteAllCartItems() async {
+  Future<int> deleteAllCartItems() async {
     final db = await database;
-    await db.delete('cart_items');
+    int res=await db.delete('cart_items');
+
+    return res;
   }
 
 

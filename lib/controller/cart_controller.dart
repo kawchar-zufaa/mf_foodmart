@@ -43,10 +43,10 @@ class CartController extends GetxController {
     return total;
   }
 
-  // Future<void> addCartItem(CartModel cartItem) async {
-  //   await dbHelper.insertCartItem(cartItem);
-  //   fetchCartItems();
-  // }
+  Future<void> deleteAllCartItems()async{
+    await CartDatabase.instance.deleteAllCartItems();
+    cartList.clear();
+  }
 
   Future<void> deleteCartItem(int productId) async {
     await CartDatabase.instance.deleteCartItem(productId);

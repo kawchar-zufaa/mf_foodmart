@@ -4,14 +4,19 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mf_foodmart/controller/address_controller.dart';
+import 'package:mf_foodmart/controller/cart_controller.dart';
+import 'package:mf_foodmart/database_helper/cart_database/cart_database.dart';
 import 'package:mf_foodmart/database_helper/delivery_address_database/delivery_address_database.dart';
+import 'package:mf_foodmart/database_helper/order_database/order_database.dart';
 import 'package:mf_foodmart/models/address_model.dart';
 import 'package:mf_foodmart/models/cart_model.dart';
+import 'package:mf_foodmart/models/order_model.dart';
 import 'package:mf_foodmart/screens/check_out/components/credit_card_items.dart';
 import 'package:mf_foodmart/screens/check_out/components/delivery_address_card.dart';
 import 'package:mf_foodmart/screens/check_out/order_successfull_screen.dart';
-import 'package:mf_foodmart/screens/delivery_address/address_screen.dart';
+import 'package:mf_foodmart/utility/constants.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 import 'package:mf_foodmart/widgets/custom_button.dart';
 import 'package:mf_foodmart/widgets/text_widget.dart';
@@ -31,11 +36,11 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final _addressController = Get.put(AddressController());
+  final _cartController=Get.put(CartController());
   bool _isCreditCard = false;
   String text = "";
   List<AddressModel> _addresses = [];
-
+  String formattedDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
   /// here checkout function.................
   Future<void> createOrder() async {
     const String userName = "ck_389df1912d9d0be0541ee41dc1e3fcbfb367bbf9";
@@ -94,19 +99,32 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     };
 
     final response = await http.post(
-      Uri.parse('https://www.mffoodmart.com/wp-json/wc/v3/orders'),
+      Uri.parse(MyConstants.createOrder),
       headers: <String, String>{
         'Authorization': basicAuth,
         'Content-Type': 'application/json',
       },
       body: jsonEncode(orderData),
     );
-    print("================================= response body ${response.body}");
     if (response.statusCode == 201) {
-      Fluttertoast.showToast(msg: 'Order placed successfully');
-      Navigator.push(context,
+
+      final List<Map<String, dynamic>> orderData = widget.cartItem!
+          .map(
+            (item) => {
+              'productId': item.productId,
+              'productImage': item.productImage,
+              'productName':item.productName,
+              'productPrice': item.productPrice,
+              'productQuantity': item.count,
+              'date':formattedDate
+            },
+          )
+          .toList();
+        final orderModel= orderData.map((lineData) =>OrderModel.fromMap(lineData)).toList();
+          OrderDatabase.instance.insertOrders(orderModel);
+         await _cartController.deleteAllCartItems();
+      await Navigator.push(context,
           MaterialPageRoute(builder: (_) => const OrderSuccessFullScreen()));
-      print('Order placed successfully');
     } else {
       Fluttertoast.showToast(msg: 'Order placed failed');
       print('Failed to create order: ${response.statusCode}');
@@ -141,7 +159,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
         centerTitle: true,
       ),
-
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         children: [
@@ -310,5 +327,3 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 }
-
-
