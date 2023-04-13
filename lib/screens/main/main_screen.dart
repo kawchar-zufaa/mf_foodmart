@@ -1,6 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mf_foodmart/screens/cart_screen/cart_screen.dart';
+import 'package:mf_foodmart/screens/drawer/custom_drawer.dart';
 import 'package:mf_foodmart/screens/home/home_screen.dart';
 import 'package:mf_foodmart/screens/order_screen/order_screen.dart';
 import 'package:mf_foodmart/screens/profile/profile_screen.dart';
@@ -46,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
               onPressed: () {}, icon: const Icon(Icons.notifications,color: MyAppColor.iconColor,),),
         ],
       ),
-      drawer: Container(),
+      drawer: CustomDrawer(),
       bottomNavigationBar: customNavigationBar(),
 
       body: pages[pageIndex],
@@ -84,3 +84,4 @@ class _MainScreenState extends State<MainScreen> {
 
 
 }
+
