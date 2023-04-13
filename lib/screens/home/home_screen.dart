@@ -72,7 +72,18 @@ class HomeScreen extends StatelessWidget {
 
                   /// Popular Product -------------------------------------
                   const SizedBox(height: 8),
-                  SizedBox(child: ProductScreen())
+                  SizedBox(child: ProductScreen()),
+                  const SizedBox(height: 10),
+                  ViewAllButton(
+                    text: "Popular Product",
+                    viewText: 'View All',
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewAllProduct()));
+                    },
+                  ),
                 ],
               ),
             )),

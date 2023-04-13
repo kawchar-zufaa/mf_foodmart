@@ -11,9 +11,16 @@ class AddressController extends GetxController{
   @override
   void onInit() {
     getAddressList();
+    _loadAddresses();
     super.onInit();
   }
 
+  void _loadAddresses() async {
+    final addresses = await DeliveryAddressDatabase.instance.getAddresses();
+
+    addressList.value = addresses;
+
+  }
 
   // void fetchAddresses() async {
   //   List<Map<String, dynamic>> maps = await DeliveryAddressDatabase.instance.getAddress();

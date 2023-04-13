@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:mf_foodmart/controller/address_controller.dart';
 import 'package:mf_foodmart/controller/cart_controller.dart';
-import 'package:mf_foodmart/database_helper/cart_database/cart_database.dart';
 import 'package:mf_foodmart/database_helper/delivery_address_database/delivery_address_database.dart';
 import 'package:mf_foodmart/database_helper/order_database/order_database.dart';
 import 'package:mf_foodmart/models/address_model.dart';
@@ -36,12 +34,21 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final _cartController=Get.put(CartController());
+  final _nameController = TextEditingController();
+  final _cardController = TextEditingController();
+  final _monthController = TextEditingController();
+  final _yearController = TextEditingController();
+  final _cvcController = TextEditingController();
+
+  final _cartController = Get.put(CartController());
   bool _isCreditCard = false;
   String text = "";
   List<AddressModel> _addresses = [];
   String formattedDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
+
   /// here checkout function.................
+
+  /// crate order function
   Future<void> createOrder() async {
     const String userName = "ck_389df1912d9d0be0541ee41dc1e3fcbfb367bbf9";
     const String userPass = "cs_643aea4269872c4005d4a106676bcd07e96af983";
@@ -106,28 +113,93 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       },
       body: jsonEncode(orderData),
     );
+
+    final orderId = jsonEncode(response.body);
     if (response.statusCode == 201) {
+      var data = json.decode(response.body);
 
       final List<Map<String, dynamic>> orderData = widget.cartItem!
           .map(
             (item) => {
               'productId': item.productId,
               'productImage': item.productImage,
-              'productName':item.productName,
+              'productName': item.productName,
               'productPrice': item.productPrice,
               'productQuantity': item.count,
-              'date':formattedDate
+              'date': formattedDate
             },
           )
           .toList();
-        final orderModel= orderData.map((lineData) =>OrderModel.fromMap(lineData)).toList();
-          OrderDatabase.instance.insertOrders(orderModel);
-         await _cartController.deleteAllCartItems();
-      await Navigator.push(context,
-          MaterialPageRoute(builder: (_) => const OrderSuccessFullScreen()));
+      final orderModel =
+          orderData.map((lineData) => OrderModel.fromMap(lineData)).toList();
+      OrderDatabase.instance.insertOrders(orderModel);
+      await _cartController.deleteAllCartItems();
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => OrderSuccessFullScreen(orderId: data['id'])));
     } else {
       Fluttertoast.showToast(msg: 'Order placed failed');
-      print('Failed to create order: ${response.statusCode}');
+    }
+  }
+
+  /// Card Method here--------------------------------
+
+  Future<void> makeBamboraRequest() async {
+    String merchantId = '376296448';
+    String apiKey = 'D180E971D40749a9b675EABB3Ac5f8df';
+
+    String passcode = '$merchantId:$apiKey';
+    String passcodeEncoded = base64Encode(utf8.encode(passcode));
+
+    String url = 'https://api.na.bambora.com/v1/payments';
+
+    Map<String, String> headers = {
+      'Authorization': 'Passcode $passcodeEncoded',
+      'Content-Type': 'application/json',
+    };
+
+    Map<String, dynamic> jsonBody = {
+      "amount": widget.totalAmount,
+      "payment_method": "card",
+      "card": {
+        "name": _nameController.text.trim(),
+        "number": _cardController.text.trim(),
+        "expiry_month": _monthController.text.trim(),
+        "expiry_year": _yearController.text.trim(),
+        "cvd": _cvcController.text.trim(),
+      },
+    };
+
+    String body = json.encode(jsonBody);
+
+    http.Response response =
+        await http.post(Uri.parse(url), headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      createOrder();
+    } else if(response.statusCode==400){
+      Fluttertoast.showToast(
+          msg: "Bad Request!");
+      print('Error: ${response.statusCode} ${response.reasonPhrase}');
+    }else if(response.statusCode==401){
+      Fluttertoast.showToast(
+          msg: "Authentication Failure!");
+    }else if(response.statusCode==402){
+      Fluttertoast.showToast(
+          msg: "Business Rule Violation or Decline!");
+    }else if(response.statusCode==403){
+      Fluttertoast.showToast(
+          msg: "Authorization Failure");
+
+    }else if(response.statusCode==405){
+      Fluttertoast.showToast(
+          msg: "Invalid Request Method!!");
+
+    }else if(response.statusCode==500){
+      Fluttertoast.showToast(
+          msg: "Internal Server Error!!");
+
     }
   }
 
@@ -170,7 +242,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           _paymentMethodButton(),
 
           /// Credit Card Items widget---------------------------------
-          _isCreditCard ? const CreditCardItems() : Container(height: 300),
+          _isCreditCard
+              ? CreditCardItems(
+                  nameController: _nameController,
+                  cardController: _cardController,
+                  monthController: _monthController,
+                  yearController: _yearController,
+                  cvcController: _cvcController,
+                )
+              : Container(height: 300),
 
           /// Privacy Policy Text And button---------------------------------
           _privacyPolicyText(),
@@ -193,19 +273,66 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   )
                 ],
               ),
-              CustomButton(
-                onTap: () {
-                  if (_addresses.isEmpty) {
-                    Fluttertoast.showToast(msg: "Add Delivery Address first!");
-                  } else {
-                    createOrder();
-                  }
-                },
-                text: "CheckOut",
-                isResponsive: true,
-              ),
+              _isCreditCard
+                  ? CustomButton(
+                      onTap: () {
+                        if (_addresses.isEmpty) {
+                          Fluttertoast.showToast(
+                              msg: "Add Delivery Address first!");
+                        } else if (_nameController.text.isEmpty ||
+                            _cardController.text.isEmpty ||
+                            _monthController.text.isEmpty ||
+                            _yearController.text.isEmpty ||
+                            _cvcController.text.isEmpty) {
+                          Fluttertoast.showToast(
+                              msg: "Please Fill up card details!");
+                        } else {
+                          makeBamboraRequest();
+                        }
+                      },
+                      text: "CheckOut",
+                      isResponsive: true,
+                    )
+                  : CustomButton(
+                      onTap: () {
+                        if (_addresses.isEmpty) {
+                          Fluttertoast.showToast(
+                              msg: "Add Delivery Address first!");
+                        } else {
+                          buildShowDialog(context);
+                        }
+                      },
+                      text: "CheckOut",
+                      isResponsive: true,
+                    ),
             ],
           )
+        ],
+      ),
+    );
+  }
+
+  Future<String?> buildShowDialog(BuildContext context) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: TextWidget(
+          text: 'Alert!!',
+          color: Colors.red,
+        ),
+        content: const Text(
+            'Are you want to order this product by cash on delivery??'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await createOrder().then((value) => Navigator.pop(context, 'OK'));
+            },
+            child: const Text('OK'),
+          ),
         ],
       ),
     );

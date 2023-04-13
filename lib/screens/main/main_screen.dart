@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mf_foodmart/screens/cart_screen/cart_screen.dart';
 import 'package:mf_foodmart/screens/home/home_screen.dart';
 import 'package:mf_foodmart/screens/order_screen/order_screen.dart';
+import 'package:mf_foodmart/screens/profile/profile_screen.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -14,10 +15,10 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int pageIndex = 0;
   final pages = [
-    HomeScreen(),
+    const HomeScreen(),
     OrderScreen(),
      CartScreen(),
-    const Text("profile Screen")
+     ProfileScreen(),
   ];
 
 
