@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mf_foodmart/api_handler/api_Service.dart';
 import 'package:mf_foodmart/models/cat_wise_product_model.dart';
 import 'package:mf_foodmart/screens/details/details_screen.dart';
@@ -20,7 +21,7 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen> {
   var categoriesList = <CatWiseProductModel>[];
   var isLoading = false;
-
+  bool isFavourite=false;
   Future<void> fetchData() async {
     try {
       isLoading = true;
@@ -108,12 +109,24 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.favorite_border_outlined,
-                                color: Color(0xffF53D3D),
-                                size: 30,
+                              onPressed: () async {
+                                setState(() {
+                                  isFavourite=!isFavourite;
+                                });
+                              },
+                              icon: isFavourite
+                                  ? const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 25,
+                              )
+                                  : const Icon(
+                                Icons.favorite_outline,
+                                color: Colors.red,
+                                size: 25,
                               ),
+
+
                             ),
                             Positioned(
                               bottom: 40,

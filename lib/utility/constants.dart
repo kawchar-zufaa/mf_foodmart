@@ -4,6 +4,7 @@ class MyConstants{
   static String categoriesWaysProduct(var cid)=>"https://www.mffoodmart.com/wp-json/wc/v3/products?category=$cid";
   static String allProduct(var page, var perPage)=>"https://www.mffoodmart.com/wp-json/wc/v3/products?orderby=popularity&per_page=$perPage&page=$page";
   static String createOrder="https://www.mffoodmart.com/wp-json/wc/v3/orders";
+  static String searchProduct(var keyword)=>"https://mffoodmart.com/wp-json/wc/v3/products?search=$keyword";
 
 }
 

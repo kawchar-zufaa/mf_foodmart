@@ -2,27 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mf_foodmart/controller/favourite_controller.dart';
 import 'package:mf_foodmart/controller/product_controller.dart';
-import 'package:mf_foodmart/screens/details/details_screen.dart';
+import 'package:mf_foodmart/screens/details/favourite_details.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 import 'package:mf_foodmart/widgets/build_image.dart';
 import 'package:mf_foodmart/widgets/text_widget.dart';
 
-class ProductScreen extends StatelessWidget {
+class FavouriteScreen extends StatelessWidget {
+   FavouriteScreen({Key? key}) : super(key: key);
   final _productController = Get.put(ProductController());
   final _favouriteController = Get.put(FavouriteController());
   @override
   Widget build(BuildContext context) {
-    _productController.getProduct();
-    _favouriteController.getFavoriteDataFromLocal();
     final size = MediaQuery.of(context).size;
     return Obx(() {
-      if (_productController.isLoading.value &&
-          _productController.productList.isEmpty) {
+      if (_favouriteController.isLoading.value &&
+          _favouriteController.favoriteList.isEmpty) {
         return const Center(
           child: CircularProgressIndicator(),
         );
-      } else if (_productController.productList.isEmpty &&
-          !_productController.isLoading.value) {
+      } else if (_favouriteController.favoriteList.isEmpty &&
+          !_favouriteController.isLoading.value) {
         return Center(
           child: TextWidget(
             text: "No found product",
@@ -30,9 +29,10 @@ class ProductScreen extends StatelessWidget {
         );
       } else {
         return GridView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: _productController.productList.length,
+          itemCount: _favouriteController.favoriteList.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisExtent: 220,
@@ -40,13 +40,7 @@ class ProductScreen extends StatelessWidget {
             mainAxisSpacing: 10,
           ),
           itemBuilder: (context, index) {
-            final data = _productController.productList[index];
-            bool isFavorite = false;
-            for (var element in _favouriteController.favoriteList) {
-              if (element.productId == data.id) {
-                isFavorite = true;
-              }
-            }
+            final data = _favouriteController.favoriteList[index];
             return Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
@@ -62,33 +56,30 @@ class ProductScreen extends StatelessWidget {
                       width: 130,
                       child: BuildImage(
                         size: size,
-                        imgUrl: data.images.first.src ?? "",
+                          imgUrl: data.productImage.first['src'],
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      _favouriteController.savaFavoriteDataInLocal(data);
-                    },
-                    icon: isFavorite
-                        ? const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                            size: 25,
-                          )
-                        : const Icon(
-                            Icons.favorite_outline,
-                            color: Colors.red,
-                            size: 25,
-                          ),
+                  Positioned(
+                    right: 6,
+                    top: -2,
+                    child: IconButton(
+                      onPressed: () {
+                          _favouriteController.removeItem(index);
+                      },
+                      icon: const Icon(Icons.close)
+
+
+                    ),
                   ),
+
                   Positioned(
                     bottom: 50,
                     left: 10,
                     child: Container(
                         width: size.width / 3,
                         child: TextWidget(
-                          text: data.name,
+                          text: data.productName,
                           maxLines: 2,
                         )),
                   ),
@@ -100,16 +91,15 @@ class ProductScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DetailsScreen(
-                              pId: data.id,
-                              images: data.images,
-                              cid: data.categories.first.id,
-                              catName: data.categories[0].name,
-                              pName: data.name,
-                              price: data.price,
+                            builder: (context) => FavouriteDetails(
+                              pId: data.productId,
+                              images: data.productImage,
+                              cid: data.cid,
+                              catName: data.categoryName,
+                              pName: data.productName,
+                              price: data.productPrice,
                               description: data.description.toString(),
-                              shortDescription:
-                                  data.shortDescription.toString(),
+                              shortDescription: data.shortDescription.toString(),
                             ),
                           ),
                         );
@@ -131,15 +121,14 @@ class ProductScreen extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    bottom: 20,
-                    left: 10,
-                    child: TextWidget(
-                      text: "CAD ${data.price}",
-                      color: MyAppColor.btnColor,
-                      size: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  )
+                      bottom: 20,
+                      left: 10,
+                      child: TextWidget(
+                        text: "CAD ${data.productPrice}",
+                        color: MyAppColor.btnColor,
+                        size: 14,
+                        fontWeight: FontWeight.w600,
+                      ))
                 ],
               ),
             );
@@ -148,4 +137,6 @@ class ProductScreen extends StatelessWidget {
       }
     });
   }
+
+
 }

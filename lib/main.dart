@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mf_foodmart/screens/delivery_address/address_list_screen.dart';
 import 'package:mf_foodmart/screens/details/details_screen.dart';
 import 'package:mf_foodmart/screens/home/home_screen.dart';
+import 'package:mf_foodmart/screens/intro_screens/intro_screen.dart';
 import 'package:mf_foodmart/screens/main/main_screen.dart';
 import 'package:mf_foodmart/screens/products/view_all_products.dart';
 import 'package:mf_foodmart/test_screen.dart';
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.green,
         primarySwatch: Colors.green,
       ),
-      home: MainScreen(),
+      home: IntroScreen(),
     );
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mf_foodmart/screens/cart_screen/cart_screen.dart';
-import 'package:mf_foodmart/screens/drawer/custom_drawer.dart';
+import 'package:mf_foodmart/screens/favourite/favourite_screen.dart';
 import 'package:mf_foodmart/screens/home/home_screen.dart';
-import 'package:mf_foodmart/screens/order_screen/order_screen.dart';
 import 'package:mf_foodmart/screens/profile/profile_screen.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
+import 'package:mf_foodmart/widgets/drawer/custom_drawer.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -16,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   int pageIndex = 0;
   final pages = [
     const HomeScreen(),
-    OrderScreen(),
+     FavouriteScreen(),
      CartScreen(),
      ProfileScreen(),
   ];
@@ -43,7 +44,9 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: MyAppColor.bgColor,
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.notifications,color: MyAppColor.iconColor,),),
+              onPressed: () {
+                Fluttertoast.showToast(msg: 'No offers this week');
+              }, icon: const Icon(Icons.notifications,color: MyAppColor.iconColor,),),
         ],
       ),
       drawer: CustomDrawer(),

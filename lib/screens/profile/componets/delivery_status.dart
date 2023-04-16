@@ -34,11 +34,11 @@ final size =MediaQuery.of(context).size;
           const SizedBox(height: 30,),
           Column(
             children: [
-             buildTimelineTile(context, size, title: "Order Placed",time: '9:30 AM',icon:Icons.check_circle_outline),
+             buildTimelineTile(context, size, title: "Order Placed",time: '9:00 AM',icon:Icons.check_circle_outline,containerColor: Colors.green),
              buildTimelineTile(context, size, title: "Pending",time: '9:30 AM',icon:Icons.check_circle_outline),
-             buildTimelineTile(context, size, title: "Confirmed",time: '9:30 AM',icon:Icons.check_circle_outline),
-             buildTimelineTile(context, size, title: "Processing",time: '9:30 AM',icon:Icons.circle,containerColor: Colors.green),
-             buildTimelineTile(context, size, title: "Delivered",time: '9:30 AM',icon:Icons.circle,),
+             buildTimelineTile(context, size, title: "Confirmed",time: '10:00 AM',icon:Icons.check_circle_outline),
+             buildTimelineTile(context, size, title: "Processing",time: '10:30 AM',icon:Icons.circle),
+             buildTimelineTile(context, size, title: "Delivered",time: '11:00 AM',icon:Icons.circle,),
             ],
           )
 
@@ -117,7 +117,7 @@ final size =MediaQuery.of(context).size;
                       style: const TextStyle(fontSize: 15),
                     ),
                     const Text(
-                     " description",
+                     "",
                       style: TextStyle(fontSize: 12),
                     ),
                   ],

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mf_foodmart/screens/search/search_scren.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
+import 'package:mf_foodmart/widgets/text_widget.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField({Key? key}) : super(key: key);
@@ -17,16 +20,17 @@ class SearchField extends StatelessWidget {
               color: const Color(0xffEAEBEC)
           )
       ),
-      child: TextField(
-        decoration: InputDecoration(
-          fillColor: MyAppColor.bgColor,
-            hintText: "Search grocery",
-            hintStyle: const TextStyle(
-                color: Color(0xffC0C0C0)
-            ),
-            border: InputBorder.none,
-            suffixIcon: IconButton(onPressed: (){}, icon: const Icon(Icons.search,color: Color(0xffC0C0C0),))
+      child: InkWell(
+        onTap: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextWidget(text: 'Search Grocery',color: Colors.grey,),
+            IconButton(onPressed: (){}, icon: const Icon(Icons.search,size: 25,color: Colors.grey,))
+          ],
         ),
-      ),);
+      ));
   }
 }

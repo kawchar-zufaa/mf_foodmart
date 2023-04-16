@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mf_foodmart/controller/address_controller.dart';
 import 'package:mf_foodmart/screens/order_screen/order_screen.dart';
+import 'package:mf_foodmart/screens/profile/componets/delivery_status.dart';
 import 'package:mf_foodmart/screens/profile/componets/my_details_screen.dart';
 import 'package:mf_foodmart/screens/profile/componets/profile_items.dart';
 import 'package:mf_foodmart/screens/profile/componets/profile_widget.dart';
@@ -37,13 +39,16 @@ final _addressController=Get.put(AddressController());
                   image: 'assets/icons/delivery_status.png',
                   title: "Delivery Status",
                   onTap: () {
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveryStatus()));
                   },
                 ),
                 ProfileItems(
                   isIcon: true,
                   icon: Icons.notifications_outlined,
                   title: "Notifications",
-                  onTap: () {},
+                  onTap: () {
+                    Fluttertoast.showToast(msg: 'No offers this week');
+                  },
                 ),
                 ProfileItems(
                   isIcon: true,

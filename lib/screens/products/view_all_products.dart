@@ -1,39 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mf_foodmart/controller/favourite_controller.dart';
 import 'package:mf_foodmart/controller/product_controller.dart';
+import 'package:mf_foodmart/screens/details/details_screen.dart';
+import 'package:mf_foodmart/widgets/build_image.dart';
 import 'package:mf_foodmart/widgets/search_field.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 import 'package:mf_foodmart/widgets/text_widget.dart';
 
 class ViewAllProduct extends StatelessWidget {
-  final  _productController = Get.put(ProductController());
-
+  final _productController = Get.put(ProductController());
+  final _favouriteController = Get.put(FavouriteController());
   ViewAllProduct({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final size=MediaQuery.of(context).size;
+    _productController.getProduct();
+    _favouriteController.getFavoriteDataFromLocal();
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: MyAppColor.bgColor,
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: MyAppColor.textColor
-        ),
-        backgroundColor: MyAppColor.bgColor,
-        elevation: 0,
+          iconTheme: const IconThemeData(color: MyAppColor.textColor),
+          backgroundColor: MyAppColor.bgColor,
+          elevation: 0,
           centerTitle: true,
-          title: TextWidget(text: "Products",color: MyAppColor.textColor,size: 20,),
+          title: TextWidget(
+            text: "Products",
+            color: MyAppColor.textColor,
+            size: 20,
+          ),
           bottom: const PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: SearchField(),
             ),
-          )
-      ),
-
-
-
+          )),
       body: NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
@@ -45,7 +48,131 @@ class ViewAllProduct extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Expanded(child: _productController.buildProductList(size)),
+              Expanded(child: Obx(() {
+                if (_productController.productList.isEmpty && _productController.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (_productController.productList.isEmpty && !_productController.isLoading.value) {
+                  return const Center(child: Text('No products found.'));
+                } else {
+                  return GridView.builder(
+                    itemCount: _productController.productList.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisExtent: 220,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                    ),
+                    itemBuilder: (context, index) {
+                      final data = _productController.productList[index];
+                      bool isFavorite = false;
+                      for (var element in _favouriteController.favoriteList) {
+                        if (element.productId == data.id) {
+                          isFavorite = true;
+                        }
+                      }
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: MyAppColor.productBG,
+                        ),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              left: 30,
+                              top: 15,
+                              child: Container(
+                                height: 130,
+                                width: 130,
+                                child: BuildImage(
+                                  size: size,
+                                  imgUrl: data.images.first.src ?? "",
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                _favouriteController.savaFavoriteDataInLocal(data);
+                              },
+                              icon: isFavorite
+                                  ? const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 25,
+                              )
+                                  : const Icon(
+                                Icons.favorite_outline,
+                                color: Colors.red,
+                                size: 25,
+                              ),
+
+
+                            ),
+                            Positioned(
+                              bottom: 50,
+                              left: 10,
+                              child: Container(
+                                  width: size.width / 3,
+                                  child: TextWidget(
+                                    text: data.name,
+                                    maxLines: 2,
+                                  )),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailsScreen(
+                                        pId: data.id,
+                                        images: data.images,
+                                        cid: data.categories.first.id,
+                                        catName: data.categories[0].name,
+                                        pName: data.name,
+                                        price: data.price,
+                                        description:
+                                            data.description.toString(),
+                                        shortDescription:
+                                            data.shortDescription.toString(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  height: 45,
+                                  width: 45,
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        bottomRight: Radius.circular(20)),
+                                    color: MyAppColor.btnColor,
+                                  ),
+                                  child: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                                bottom: 20,
+                                left: 10,
+                                child: TextWidget(
+                                  text: "CAD ${data.price}",
+                                  color: MyAppColor.btnColor,
+                                  size: 14,
+                                  fontWeight: FontWeight.w600,
+                                ))
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+              })),
               Obx(() {
                 if (_productController.isLoading.value) {
                   return const Padding(

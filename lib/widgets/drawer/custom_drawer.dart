@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mf_foodmart/database_helper/delivery_address_database/delivery_address_database.dart';
 import 'package:mf_foodmart/database_helper/profile_database/profile_databae.dart';
 import 'package:mf_foodmart/screens/order_screen/order_screen.dart';
@@ -131,7 +132,9 @@ class CustomDrawer extends StatelessWidget {
                 isIcon: true,
                 icon: Icons.notifications_outlined,
                 title: "Notifications",
-                onTap: () {},
+                onTap: () {
+                  Fluttertoast.showToast(msg: 'No offers this week');
+                },
               ),
               ProfileItems(
                 isIcon: true,
