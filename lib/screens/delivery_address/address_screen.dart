@@ -33,6 +33,7 @@ class _AddressScreenState extends State<AddressScreen> {
   TextEditingController phoneController = TextEditingController();
   final _addressController = Get.put(AddressController());
   final _cartController = Get.put(CartController());
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -66,60 +67,121 @@ class _AddressScreenState extends State<AddressScreen> {
         ),
         centerTitle: true,
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        children: [
-          AddressTextFilled(
-            text: 'First Name',
-            controller: firstNameController,
-          ),
-          AddressTextFilled(
-            text: 'Last Name',
-            controller: lastNameController,
-          ),
-          AddressTextFilled(
-            text: 'Company(Optional)',
-            controller: companyController,
-          ),
-          AddressTextFilled(
-            text: 'Address1',
-            controller: address1Controller,
-          ),
-          AddressTextFilled(
-            text: 'Address2',
-            controller: address2Controller,
-          ),
-          AddressTextFilled(
-            text: 'City',
-            controller: cityController,
-          ),
-          AddressTextFilled(
-            text: 'State',
-            controller: stateController,
-          ),
-          AddressTextFilled(
-            text: 'PostCode',
-            controller: postcodeController,
-          ),
-          AddressTextFilled(
-            text: 'Country/Region',
-            controller: countryController,
-          ),
-          AddressTextFilled(
-            text: 'Email',
-            controller: emailController,
-          ),
-          AddressTextFilled(
-            text: 'Phone',
-            controller: phoneController,
-          ),
-        ],
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          children: [
+            AddressTextFilled(
+              text: 'First Name',
+              controller: firstNameController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Enter you first Name";
+                }
+                return null;
+              },
+            ),
+            AddressTextFilled(
+              text: 'Last Name',
+              controller: lastNameController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Enter your Last Name';
+                }
+                return null;
+              },
+            ),
+            AddressTextFilled(
+              text: 'Company(Optional)',
+              controller: companyController,
+            ),
+            AddressTextFilled(
+              text: 'Address1',
+              controller: address1Controller,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Enter your Address1';
+                }
+                return null;
+              },
+            ),
+            AddressTextFilled(
+              text: 'Address2',
+              controller: address2Controller,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Enter your Address2';
+                }
+                return null;
+              },
+            ),
+            AddressTextFilled(
+              text: 'City',
+              controller: cityController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Enter your City Name';
+                }
+                return null;
+              },
+            ),
+            AddressTextFilled(
+              text: 'State',
+              controller: stateController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Enter your State Name';
+                }
+                return null;
+              },
+            ),
+            AddressTextFilled(
+              textInputType: TextInputType.number,
+              text: 'PostCode',
+              controller: postcodeController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Enter your PostCode';
+                }
+                return null;
+              },
+            ),
+            AddressTextFilled(
+              text: 'Country/Region',
+              controller: countryController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Enter your Country Name';
+                }
+                return null;
+              },
+            ),
+            AddressTextFilled(
+              textInputType: TextInputType.emailAddress,
+              text: 'Email',
+              validator: validateEmail,
+              controller: emailController,
+            ),
+            AddressTextFilled(
+              textInputType: TextInputType.phone,
+              text: 'Phone',
+              controller: phoneController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Enter your Phone number';
+                }
+                return null;
+              },
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: Padding(
           padding: const EdgeInsets.only(bottom: 10, left: 5, right: 5),
           child: CustomButton(
             onTap: () async {
-              if (validateFields()) {
+              if (_formKey.currentState!.validate()) {
                 AddressModel addressModel = AddressModel(
                   firstName: firstNameController.text,
                   lastName: lastNameController.text,
@@ -151,13 +213,15 @@ class _AddressScreenState extends State<AddressScreen> {
                   await DeliveryAddressDatabase.instance
                       .updateAddress(addressModel);
                   Fluttertoast.showToast(msg: 'Data Updated Successfully');
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => CheckoutScreen(
-                        cartItem: _cartController.cartList,
-                        totalAmount: _cartController.getTotalPrice() +
-                            _cartController.shippingCharge.value +
-                            _cartController.discount.value,
-                      )));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => CheckoutScreen(
+                                cartItem: _cartController.cartList,
+                                totalAmount: _cartController.getTotalPrice() +
+                                    _cartController.shippingCharge.value +
+                                    _cartController.discount.value,
+                              )));
                 }
               }
             },
@@ -188,5 +252,22 @@ class _AddressScreenState extends State<AddressScreen> {
       return false;
     }
     return true;
+  }
+
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    if (!GetUtils.isEmail(value)) {
+      return 'Invalid email';
+    }
+    return null;
+  }
+
+  String? textValidation(String? value, {required String text}) {
+    if (value == null || value.isEmpty) {
+      return text;
+    }
+    return null;
   }
 }

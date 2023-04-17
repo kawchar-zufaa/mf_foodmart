@@ -31,6 +31,8 @@ final size =MediaQuery.of(context).size;
         children: [
           TextWidget(text: "Estimated Delivery",color: Colors.black87),
           TextWidget(text: formattedDate),
+          const SizedBox(height: 15,),
+          TextWidget(text: 'Coming soon',size: 30,color: MyAppColor.btnColor,fontWeight: FontWeight.bold,),
           const SizedBox(height: 30,),
           Column(
             children: [

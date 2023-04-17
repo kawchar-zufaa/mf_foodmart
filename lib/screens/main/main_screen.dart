@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mf_foodmart/screens/cart_screen/cart_screen.dart';
@@ -22,11 +25,50 @@ class _MainScreenState extends State<MainScreen> {
      ProfileScreen(),
   ];
 
+  bool isConnected = true;
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   void _onItemTapped(value){
     setState(() {
       pageIndex=value;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkConnectivity();
+    _connectivitySubscription =
+        Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+          if (result == ConnectivityResult.none) {
+            setState(() {
+              isConnected = false;
+            });
+          } else {
+            setState(() {
+              isConnected = true;
+            });
+          }
+        });
+  }
+
+  Future<void> checkConnectivity() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        isConnected = false;
+      });
+    } else {
+      setState(() {
+        isConnected = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -52,7 +94,8 @@ class _MainScreenState extends State<MainScreen> {
       drawer: CustomDrawer(),
       bottomNavigationBar: customNavigationBar(),
 
-      body: pages[pageIndex],
+      body: isConnected ? pages[pageIndex] : noInternetContent(),
+      // pages[pageIndex],
     );
   }
 
@@ -85,6 +128,55 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-
+  Widget noInternetContent() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.signal_wifi_off,
+            size: 48,
+            color: MyAppColor.iconColor,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "No Internet Connection",
+            style: TextStyle(
+              color: MyAppColor.textColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            onPressed: () async {
+              var connectivityResult = await Connectivity().checkConnectivity();
+              if (connectivityResult != ConnectivityResult.none) {
+                setState(() {
+                  isConnected = true;
+                });
+              } else {
+                Fluttertoast.showToast(msg: 'No internet connection');
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              primary: MyAppColor.btnColor,
+              onPrimary: MyAppColor.textColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Text(
+                "Retry",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:mf_foodmart/api_handler/api_Service.dart';
 import 'package:mf_foodmart/models/cat_wise_product_model.dart';
 import 'package:mf_foodmart/screens/details/details_screen.dart';
@@ -21,7 +20,6 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen> {
   var categoriesList = <CatWiseProductModel>[];
   var isLoading = false;
-  bool isFavourite=false;
   Future<void> fetchData() async {
     try {
       isLoading = true;
@@ -97,24 +95,44 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             Positioned(
                               left: 35,
                               top: 15,
-                              child: Container(
-                                height: 120,
-                                width: 120,
-                                child: BuildImage(
-                                  size: size,
-                                  imgUrl: data.images!.isNotEmpty
-                                      ? data.images!.first.src.toString()
-                                      : "",
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailsScreen(
+                                        pId: data.id!.toInt(),
+                                        images: data.images!,
+                                        cid: data.categories!.first.id,
+                                        catName: data.categories![0].name,
+                                        pName: data.name.toString(),
+                                        price: data.price.toString(),
+                                        description: data.description!,
+                                        shortDescription:
+                                        data.shortDescription!,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  height: 120,
+                                  width: 120,
+                                  child: BuildImage(
+                                    size: size,
+                                    imgUrl: data.images!.isNotEmpty
+                                        ? data.images!.first.src.toString()
+                                        : "",
+                                  ),
                                 ),
                               ),
                             ),
                             IconButton(
                               onPressed: () async {
                                 setState(() {
-                                  isFavourite=!isFavourite;
+                                  data.isFavourite=!data.isFavourite;
                                 });
                               },
-                              icon: isFavourite
+                              icon:data.isFavourite
                                   ? const Icon(
                                 Icons.favorite,
                                 color: Colors.red,

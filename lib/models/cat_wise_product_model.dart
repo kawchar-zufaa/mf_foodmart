@@ -76,6 +76,7 @@ class CatWiseProductModel {
      this.stockStatus,
      this.hasOptions,
      this.links,
+    this.isFavourite=false,
   });
 
   int? id;
@@ -146,6 +147,7 @@ class CatWiseProductModel {
   StockStatus? stockStatus;
   bool? hasOptions;
   Links? links;
+  bool isFavourite;
 
   factory CatWiseProductModel.fromJson(Map<String, dynamic> json) => CatWiseProductModel(
     id: json["id"],

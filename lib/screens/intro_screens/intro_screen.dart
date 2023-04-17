@@ -28,7 +28,7 @@ class _IntroScreenState extends State<IntroScreen> {
       isOnboardingShown = isShown;
     });
     if (isOnboardingShown) {
-      // Navigate to home screen after a delay
+
       Future.delayed(const Duration(seconds: 2), () {
         Navigator.pushReplacement(
           context,
@@ -36,13 +36,12 @@ class _IntroScreenState extends State<IntroScreen> {
         );
       });
     } else {
-      // Show onboarding screen after a delay
+
       Future.delayed(const Duration(seconds: 2), () async {
         await Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const OnboardingScreen()),
         );
-        // Set the flag to true after showing onboarding screen
         await sharedPreferences.setBool('isOnboardingShown', true);
         setState(() {
           isOnboardingShown = true;

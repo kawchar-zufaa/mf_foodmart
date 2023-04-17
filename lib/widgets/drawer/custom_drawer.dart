@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mf_foodmart/database_helper/delivery_address_database/delivery_address_database.dart';
 import 'package:mf_foodmart/database_helper/profile_database/profile_databae.dart';
+import 'package:mf_foodmart/screens/help_screens/help_screen.dart';
 import 'package:mf_foodmart/screens/order_screen/order_screen.dart';
 import 'package:mf_foodmart/screens/profile/componets/delivery_status.dart';
 import 'package:mf_foodmart/screens/profile/componets/my_details_screen.dart';
@@ -140,7 +141,9 @@ class CustomDrawer extends StatelessWidget {
                 isIcon: true,
                 icon: Icons.help_outline_outlined,
                 title: "Help",
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const HelpScreen()));
+                },
               ),
             ],
           ),

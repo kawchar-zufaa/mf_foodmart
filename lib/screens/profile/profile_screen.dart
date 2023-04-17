@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mf_foodmart/controller/address_controller.dart';
+import 'package:mf_foodmart/screens/help_screens/help_screen.dart';
 import 'package:mf_foodmart/screens/order_screen/order_screen.dart';
 import 'package:mf_foodmart/screens/profile/componets/delivery_status.dart';
 import 'package:mf_foodmart/screens/profile/componets/my_details_screen.dart';
@@ -54,7 +55,9 @@ final _addressController=Get.put(AddressController());
                   isIcon: true,
                   icon: Icons.help_outline_outlined,
                   title: "Help",
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const HelpScreen()));
+                  },
                 ),
               ],
             ),

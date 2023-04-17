@@ -64,7 +64,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           },
         )
         .toList();
-
     final Map<String, dynamic> billing = {
       'first_name': _addresses.first.firstName,
       'last_name': _addresses.first.lastName,
@@ -76,7 +75,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       'email': _addresses.first.email,
       'phone': _addresses.first.phone,
     };
-
     final Map<String, dynamic> shipping = {
       'first_name': _addresses.first.firstName,
       'last_name': _addresses.first.lastName,
@@ -113,11 +111,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       },
       body: jsonEncode(orderData),
     );
-
-    final orderId = jsonEncode(response.body);
+    var order = json.decode(response.body);
     if (response.statusCode == 201) {
       var data = json.decode(response.body);
-
       final List<Map<String, dynamic>> orderData = widget.cartItem!
           .map(
             (item) => {

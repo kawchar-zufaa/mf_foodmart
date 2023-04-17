@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:mf_foodmart/api_handler/api_Service.dart';
+import 'package:mf_foodmart/controller/favourite_controller.dart';
 import 'package:mf_foodmart/database_helper/cart_database/cart_database.dart';
 import 'package:mf_foodmart/models/cart_model.dart';
 import 'package:mf_foodmart/models/cat_wise_product_model.dart';
@@ -38,6 +40,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  final _favouriteController=Get.put(FavouriteController());
   int _currentIndex = 0;
   int count=1;
   var _isRemove=false;
@@ -372,7 +375,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  Widget _backAndFavoriteButton(BuildContext context) {
+  Widget _backAndFavoriteButton(BuildContext context,) {
     return Positioned(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -385,18 +388,29 @@ class _DetailsScreenState extends State<DetailsScreen> {
               },
               icon: const Icon(Icons.arrow_back),
             ),
+            const SizedBox(width: 50,),
             TextWidget(
               text: "Product Details",
               size: 16,
               fontWeight: FontWeight.w400,
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.favorite,
-                color: Colors.red,
-              ),
-            ),
+            Expanded(child: Container())
+            // IconButton(
+            //   onPressed: () async {
+            //     _favouriteController.savaFavoriteDataInLocal(data);
+            //   },
+            //   icon: isFavorite
+            //       ? const Icon(
+            //     Icons.favorite,
+            //     color: Colors.red,
+            //     size: 25,
+            //   )
+            //       : const Icon(
+            //     Icons.favorite_outline,
+            //     color: Colors.red,
+            //     size: 25,
+            //   ),
+            // ),
           ],
         ),
       ),

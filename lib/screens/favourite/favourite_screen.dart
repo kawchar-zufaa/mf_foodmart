@@ -51,12 +51,31 @@ class FavouriteScreen extends StatelessWidget {
                   Positioned(
                     left: 30,
                     top: 15,
-                    child: Container(
-                      height: 130,
-                      width: 130,
-                      child: BuildImage(
-                        size: size,
-                          imgUrl: data.productImage.first['src'],
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FavouriteDetails(
+                              pId: data.productId,
+                              images: data.productImage,
+                              cid: data.cid,
+                              catName: data.categoryName,
+                              pName: data.productName,
+                              price: data.productPrice,
+                              description: data.description.toString(),
+                              shortDescription: data.shortDescription.toString(),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 130,
+                        width: 130,
+                        child: BuildImage(
+                          size: size,
+                            imgUrl:data.productImage.isNotEmpty? data.productImage.first['src']:'',
+                        ),
                       ),
                     ),
                   ),

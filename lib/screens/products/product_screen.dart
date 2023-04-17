@@ -57,12 +57,32 @@ class ProductScreen extends StatelessWidget {
                   Positioned(
                     left: 30,
                     top: 15,
-                    child: Container(
-                      height: 130,
-                      width: 130,
-                      child: BuildImage(
-                        size: size,
-                        imgUrl: data.images.first.src ?? "",
+                    child: InkWell(
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailsScreen(
+                              pId: data.id,
+                              images: data.images,
+                              cid: data.categories.first.id,
+                              catName: data.categories[0].name,
+                              pName: data.name,
+                              price: data.price,
+                              description: data.description.toString(),
+                              shortDescription:
+                              data.shortDescription.toString(),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 130,
+                        width: 130,
+                        child: BuildImage(
+                          size: size,
+                          imgUrl:data.images.isNotEmpty?data.images.first.src ?? "":"",
+                        ),
                       ),
                     ),
                   ),

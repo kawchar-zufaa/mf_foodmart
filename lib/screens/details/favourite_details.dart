@@ -385,18 +385,20 @@ class _FavouriteDetailsState extends State<FavouriteDetails> {
               },
               icon: const Icon(Icons.arrow_back),
             ),
+            const SizedBox(width: 50,),
             TextWidget(
               text: "Product Details",
               size: 16,
               fontWeight: FontWeight.w400,
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.favorite,
-                color: Colors.red,
-              ),
-            ),
+            Expanded(child: Container())
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: const Icon(
+            //     Icons.favorite,
+            //     color: Colors.red,
+            //   ),
+            // ),
           ],
         ),
       ),
