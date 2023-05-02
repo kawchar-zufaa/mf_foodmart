@@ -1,4 +1,4 @@
-package com.example.mf_foodmart
+package com.zufaa.mffoodmart
 
 import io.flutter.embedding.android.FlutterActivity
 

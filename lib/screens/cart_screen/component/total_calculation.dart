@@ -25,7 +25,8 @@ class TotalCalculation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Subtotal:'),
-            Text('CAD ${_cartController.getTotalPrice()}'),
+            //Text('CAD ${_cartController.getTotalPrice()}'),
+            Text('CAD ${_cartController.getTotalPrice().toStringAsFixed(2)}'),
           ],
         ),
         const SizedBox(height: 8,),
@@ -33,7 +34,8 @@ class TotalCalculation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Shipping:'),
-            Text('CAD ${_cartController.shippingCharge.value}'),
+            Text('CAD ${_cartController.shippingCharge.value.toStringAsFixed(2)}'),
+            // Text('CAD ${_cartController.shippingCharge.value}'),
           ],
         ),
         const SizedBox(height: 8,),
@@ -41,7 +43,8 @@ class TotalCalculation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text('Discount:'),
-            Text('CAD ${_cartController.discount.value}'),
+            Text('CAD ${_cartController.discount.value.toStringAsFixed(2)}'),
+            //Text('CAD ${_cartController.discount.value}'),
           ],
         ),
         const Text('----------------------------------------------------------------',style: TextStyle(
@@ -51,7 +54,8 @@ class TotalCalculation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextWidget(text: 'Total :',size: 20,fontWeight: FontWeight.bold,),
-            TextWidget(text: 'CAD ${_cartController.getTotalPrice()+_cartController.shippingCharge.value+_cartController.discount.value}',size: 20,fontWeight: FontWeight.bold,)
+            TextWidget(text: 'CAD ${( _cartController.getTotalPrice()+_cartController.shippingCharge.value+_cartController.discount.value).toStringAsFixed(2)}',size: 20,fontWeight: FontWeight.bold,)
+            //TextWidget(text: 'CAD ${_cartController.getTotalPrice()+_cartController.shippingCharge.value+_cartController.discount.value}',size: 20,fontWeight: FontWeight.bold,)
           ],
         ),
       ],

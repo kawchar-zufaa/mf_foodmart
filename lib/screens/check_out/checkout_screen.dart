@@ -14,6 +14,7 @@ import 'package:mf_foodmart/models/order_model.dart';
 import 'package:mf_foodmart/screens/check_out/components/credit_card_items.dart';
 import 'package:mf_foodmart/screens/check_out/components/delivery_address_card.dart';
 import 'package:mf_foodmart/screens/check_out/order_successfull_screen.dart';
+import 'package:mf_foodmart/screens/help_screens/components/privacy_policy.dart';
 import 'package:mf_foodmart/utility/constants.dart';
 import 'package:mf_foodmart/utility/my_app_colors.dart';
 import 'package:mf_foodmart/widgets/custom_button.dart';
@@ -174,28 +175,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     if (response.statusCode == 200) {
       createOrder();
-    } else if(response.statusCode==400){
-      Fluttertoast.showToast(
-          msg: "Bad Request!");
+    } else if (response.statusCode == 400) {
+      Fluttertoast.showToast(msg: "Bad Request!");
       print('Error: ${response.statusCode} ${response.reasonPhrase}');
-    }else if(response.statusCode==401){
-      Fluttertoast.showToast(
-          msg: "Authentication Failure!");
-    }else if(response.statusCode==402){
-      Fluttertoast.showToast(
-          msg: "Business Rule Violation or Decline!");
-    }else if(response.statusCode==403){
-      Fluttertoast.showToast(
-          msg: "Authorization Failure");
-
-    }else if(response.statusCode==405){
-      Fluttertoast.showToast(
-          msg: "Invalid Request Method!!");
-
-    }else if(response.statusCode==500){
-      Fluttertoast.showToast(
-          msg: "Internal Server Error!!");
-
+    } else if (response.statusCode == 401) {
+      Fluttertoast.showToast(msg: "Authentication Failure!");
+    } else if (response.statusCode == 402) {
+      Fluttertoast.showToast(msg: "Business Rule Violation or Decline!");
+    } else if (response.statusCode == 403) {
+      Fluttertoast.showToast(msg: "Authorization Failure");
+    } else if (response.statusCode == 405) {
+      Fluttertoast.showToast(msg: "Invalid Request Method!!");
+    } else if (response.statusCode == 500) {
+      Fluttertoast.showToast(msg: "Internal Server Error!!");
     }
   }
 
@@ -263,7 +255,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     color: const Color(0xff8B8B8B),
                   ),
                   TextWidget(
-                    text: 'CAD ${widget.totalAmount}',
+                    text: 'CAD ${(widget.totalAmount)!.toStringAsFixed(2)}',
                     color: MyAppColor.btnColor,
                     fontWeight: FontWeight.bold,
                   )
@@ -272,7 +264,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               _isCreditCard
                   ? CustomButton(
                       onTap: () {
-                        if (_addresses.isEmpty) {
+                        if (widget.totalAmount! < 50) {
+                          Fluttertoast.showToast(
+                              msg:
+                                  "You must have an order with a minimum of CAD 50.00 to place your order");
+                        } else if (_addresses.isEmpty) {
                           Fluttertoast.showToast(
                               msg: "Add Delivery Address first!");
                         } else if (_nameController.text.isEmpty ||
@@ -291,7 +287,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     )
                   : CustomButton(
                       onTap: () {
-                        if (_addresses.isEmpty) {
+                        if (widget.totalAmount! < 50) {
+                          Fluttertoast.showToast(
+                              msg:
+                                  "You must have an order with a minimum of CAD 50.00 to place your order");
+                        } else if (_addresses.isEmpty) {
                           Fluttertoast.showToast(
                               msg: "Add Delivery Address first!");
                         } else {
@@ -350,7 +350,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               fontWeight: FontWeight.w500,
               decoration: TextDecoration.underline,
             ),
-            recognizer: TapGestureRecognizer()..onTap = () {},
+            recognizer: TapGestureRecognizer()..onTap = () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>const PrivecyPolicy()));
+            },
           ),
           const TextSpan(text: '.'),
         ],

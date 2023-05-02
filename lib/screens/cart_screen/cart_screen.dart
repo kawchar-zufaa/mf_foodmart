@@ -68,3 +68,6 @@ class CartScreen extends StatelessWidget {
     }));
   }
 }
+// double totalAmount = 34.45000000;
+// String formattedAmount = String.format("%.2f", totalAmount);
+// System.out.println(formattedAmount); //
