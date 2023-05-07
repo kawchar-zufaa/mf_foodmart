@@ -2,7 +2,7 @@
     package="com.zufaa.mffoodmart">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="MF Food Mart"
+        android:label="MF FoodMart"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
