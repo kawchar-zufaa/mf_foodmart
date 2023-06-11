@@ -8,7 +8,7 @@ import 'package:mf_foodmart/widgets/text_widget.dart';
 
 class SearchScreen extends StatelessWidget {
    SearchScreen({Key? key}) : super(key: key);
- final _searchController=Get.put(SearchController());
+ final _searchController=Get.put(MySearchController());
   @override
   Widget build(BuildContext context) {
     final size=MediaQuery.of(context).size;

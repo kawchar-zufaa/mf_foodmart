@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:mf_foodmart/models/product_model.dart';
 import 'package:mf_foodmart/utility/constants.dart';
 
-class SearchController extends GetxController {
+class MySearchController extends GetxController {
   var products = <ProductModel>[].obs;
   var isLoading = false.obs;
 
