@@ -1,16 +1,10 @@
+
 # mf_foodmart
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![246101569-d92fb613-ed06-4226-9271-d22c12b04aee](https://github.com/kawchar-zufaa/mf_foodmart/assets/113238263/072f3d83-d92b-41cc-a8ec-80cfe1512703)
+![246101830-f69e85bc-cf77-4906-85b5-1d431a4e200e](https://github.com/kawchar-zufaa/mf_foodmart/assets/113238263/b7227553-e373-4c12-affb-0aabc0c564d2)
+![246101680-e1dc8729-8930-4d4e-9059-61219c73beb1](https://github.com/kawchar-zufaa/mf_foodmart/assets/113238263/55a6b3fc-0e22-4750-a514-1dbea3de6ce8)
